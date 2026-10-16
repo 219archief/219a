@@ -6,7 +6,7 @@
  let generation=0,effects=[];
  function clearEffects(){effects.forEach(effect=>effect.cancel());effects=[];}
  function reset(){generation++;clearEffects();stage.classList.remove('is-loading','has-viewer-photo');stage.setAttribute('aria-busy','false');loading.hidden=true;image.hidden=true;error.hidden=true}
- function labels(photo,index,total,year){document.querySelector('#full-caption').textContent=`${photo.place} — ${year}`;const counter=document.querySelector('#viewer-count');counter.textContent=`${index+1} / ${total}`;counter.setAttribute('aria-label',`foto ${index+1} van ${total}`);const position=document.querySelector('#viewer-position');position.replaceChildren();position.hidden=total>12||total<2;if(!position.hidden)for(let i=0;i<total;i++){const mark=document.createElement('i');if(i===index)mark.className='is-current';position.append(mark)}}
+ function labels(photo,index,total,year){document.querySelector('#full-caption').textContent=`${photo.place} — ${year}`;const counter=document.querySelector('#viewer-count');counter.textContent=`${index+1} / ${total}`;counter.setAttribute('aria-label',`foto ${index+1} van ${total}`);}
  async function show({photo,index,total,year,src}){
   const current=++generation,hasPhoto=stage.classList.contains('has-viewer-photo')&&!image.hidden;
   stage.classList.add('is-loading');stage.setAttribute('aria-busy','true');loading.hidden=false;error.hidden=true;
