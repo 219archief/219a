@@ -71,3 +71,8 @@
 .project-breadcrumb>[aria-current]::before{content:'';flex:none;width:12px;height:10px;background:currentColor;clip-path:polygon(0 0,42% 0,58% 22%,100% 22%,100% 100%,0 100%);opacity:.75}
 @media(max-width:599px){.project-breadcrumb{font-size:11px;column-gap:8px}.project-breadcrumb>[aria-current]{gap:6px}}
 @media(prefers-reduced-motion:reduce){.project-breadcrumb>a{transition:none}}
+/* Share the info page's content axis and top spacing. */
+@media(min-width:600px){.archive-directory{margin-left:0;padding-left:calc(4vw + clamp(145px,20vw,280px) + clamp(32px,4vw,80px));padding-top:290px}}
+@media(min-width:1700px){.archive-directory{padding-top:320px}}
+@media(min-width:600px) and (max-width:900px){.archive-directory{padding-top:250px}}
+@media(max-width:599px){.archive-directory{padding-top:245px}}
