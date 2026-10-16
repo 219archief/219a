@@ -6,7 +6,7 @@ export async function POST(request:Request){
  if(request.headers.get('origin')!==url.origin||request.headers.get('sec-fetch-site')==='cross-site')return json({error:'dit verzoek is niet toegestaan.'},403);
  if(!request.headers.get('content-type')?.startsWith('application/json'))return json({error:'ongeldig berichtformaat.'},415);
  if(Number(request.headers.get('content-length'))>24000)return json({error:'je bericht is te lang.'},413);
- let data:any;
+ let data:Record<string,unknown>;
  try{
   const reader=request.body?.getReader();if(!reader)return json({error:'het bericht ontbreekt.'},400);
   const chunks:Uint8Array[]=[];let size=0;
@@ -39,8 +39,8 @@ export async function POST(request:Request){
    // Storage is the receipt of record. Notification failure never loses a message.
    let delivered=false;
    try{const response=await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:'Bearer '+bindings.RESEND_API_KEY,'Content-Type':'application/json','Idempotency-Key':id},body:JSON.stringify({from:bindings.CONTACT_FROM,to:[bindings.CONTACT_TO],reply_to:email,subject:'219 / '+(subject||'nieuw bericht'),text:'naam: '+name+'\ne-mail: '+email+'\n\n'+message}),signal:AbortSignal.timeout(7000)});delivered=response.ok;}catch{console.warn('Contact notification unavailable; message retained.');}
-   await bindings.DB.prepare('UPDATE contact_messages SET notification = ? WHERE id = ?').bind(delivered?'sent':'failed',id).run();
+   try{await bindings.DB.prepare('UPDATE contact_messages SET notification = ? WHERE id = ?').bind(delivered?'sent':'failed',id).run();}catch{console.warn('Contact notification status unavailable; message retained.');}
   }
   return json({received:true},201);
- }catch(error){console.error('Contact storage unavailable.');return json({error:'opslaan is niet gelukt. je bericht blijft ingevuld; probeer het opnieuw.'},503);}
+ }catch{console.error('Contact storage unavailable.');return json({error:'opslaan is niet gelukt. je bericht blijft ingevuld; probeer het opnieuw.'},503);}
 }

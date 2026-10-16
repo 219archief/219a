@@ -1,16 +1,17 @@
-const {photos,compose}=PortfolioLayout;
-const {projects,projectForPhoto,projectFromHash,rowsFor}=PortfolioProjects;
+const {photos}=PortfolioLayout;
+const {projectForPhoto,projectFromHash,rowsFor}=PortfolioProjects;
 const canvas=document.querySelector('.canvas'),dialog=document.querySelector('dialog'),fullImage=document.querySelector('#full-image'),projectPage=document.querySelector('#project'),homePage=document.querySelector('#werk'),footer=document.querySelector('footer'),infoPage=document.querySelector('#info');
 
 let projectReturnHash='#werk';
 try{const saved=sessionStorage.getItem('219:project-return');if(['#werk','#archief','#info','#contact'].includes(saved))projectReturnHash=saved}catch{}
 const archivePage=document.querySelector('#archive');
-let active=0,lastFocus,homeFocusPhotoId,lastWidth=0,currentProject,viewerPhotos=photos,homeScroll=window.PortfolioColorTransition?.getHomeScroll()||0,previousHash=location.hash;
+let active=0,lastFocus,homeFocusPhotoId,currentProject,viewerPhotos=photos,homeScroll=window.PortfolioColorTransition?.getHomeScroll()||0,previousHash=location.hash;
 document.querySelector('#year').textContent=new Date().getFullYear();document.querySelector('.archive-end>span:last-child').textContent=String(photos.length).padStart(3,'0')+' observaties';
 const url=(p,w)=>`assets/responsive/${p.id}-${w}.webp`;
-function imageFor(p,eager=false){const img=document.createElement('img');Object.assign(img,{alt:p.alt,width:Math.round(p.ratio*1000),height:1000,decoding:'async',loading:eager?'eager':'lazy',src:url(p,960)});img.srcset=[320,480,720,960,1440,2200].map(w=>`${url(p,w)} ${w}w`).join(', ');return img}
+function imageFor(p,eager=false){const img=document.createElement('img');Object.assign(img,{alt:p.alt,width:Math.round(p.ratio*1000),height:1000,decoding:'async',loading:eager?'eager':'lazy',fetchPriority:eager?'high':'auto',src:url(p,960)});img.srcset=[320,480,720,960,1440,2200].map(w=>`${url(p,w)} ${w}w`).join(', ');return img}
 function captionFor(p,i,archive=false){const caption=document.createElement('figcaption'),label=document.createElement('span'),number=document.createElement('span');label.textContent=p.place;number.className='number';number.textContent=projectForPhoto(p.id).year;label.className='caption-place';caption.append(label,number);if(archive){const project=projectForPhoto(p.id),series=document.createElement('span');series.className='series-label';series.textContent='uit '+project.title.toLowerCase();series.style.setProperty('--series-color',PortfolioProjects.projectAppearance(project).enabled?project.backgroundColor:'#161616');caption.append(series)}return caption}
-const figures=photos.map((p,i)=>{const figure=document.createElement('figure');figure.className='photo';figure.dataset.photoId=p.id;figure.style.setProperty('--ratio',p.ratio);figure.style.setProperty('--delay',Math.min(i*50,350)+'ms');const link=document.createElement('a');const project=projectForPhoto(p.id);link.href=`#/project/${project.id}`;link.setAttribute('aria-label',`Open project: ${project.title} — ${p.place}`);const appearance=PortfolioProjects.projectAppearance(project,p.id);if(appearance.coverEnabled){figure.classList.add('has-project-accent');figure.style.setProperty('--project-accent',appearance.color)}link.append(imageFor(p,i<2));figure.dataset.projectId=project.id;figure.append(link,captionFor(p,i,true));canvas.append(figure);return figure});
+const firstHomePhotoId=PortfolioProjects.sortedPhotos(photos).find(photo=>projectForPhoto(photo.id).homeEnabled!==false)?.id;
+const figures=photos.map((p,i)=>{const figure=document.createElement('figure');figure.className='photo';figure.dataset.photoId=p.id;figure.style.setProperty('--ratio',p.ratio);figure.style.setProperty('--delay',Math.min(i*50,350)+'ms');const link=document.createElement('a');const project=projectForPhoto(p.id);link.href=`#/project/${project.id}`;link.setAttribute('aria-label',`Open project: ${project.title} — ${p.place}`);const appearance=PortfolioProjects.projectAppearance(project,p.id);if(appearance.coverEnabled){figure.classList.add('has-project-accent');figure.style.setProperty('--project-accent',appearance.color)}link.append(imageFor(p,p.id===firstHomePhotoId));figure.dataset.projectId=project.id;figure.append(link,captionFor(p,i,true));canvas.append(figure);return figure});
 const livingHome=PortfolioLiving.create({canvas,figures,photos});
 function layout(){livingHome.layout()}
 
@@ -28,14 +29,14 @@ function route(initial=false){
  homePage.hidden=!!project||isInfo||isArchive;projectPage.hidden=!project;infoPage.hidden=!isInfo;archivePage.hidden=!isArchive;footer.hidden=!!project||isInfo||isArchive;
  if(project){renderProject(project);void PortfolioProjectReveal.show();document.title=project.title.toLowerCase()+' — 219';window.scrollTo(0,0);if(!initial)projectPage.focus({preventScroll:true})}
  else if(isArchive){viewerPhotos=photos;PortfolioDirectory.render();document.title='archief — 219';window.scrollTo(0,0);if(!initial)archivePage.focus({preventScroll:true})}
- else{viewerPhotos=photos;document.title='219 — fotografisch archief';lastWidth=0;layout();
+ else{viewerPhotos=photos;document.title='219 — fotografisch archief';layout();
   if(isInfo){document.title='info & contact — 219';window.scrollTo(0,0);if(!initial)infoPage.focus({preventScroll:true});if(location.hash==='#contact')document.querySelector('#contact-form').scrollIntoView({block:'center'})}
   else if(wasProject){window.scrollTo(0,homeScroll);if(!initial){const target=figures.find(f=>f.dataset.photoId===homeFocusPhotoId)||figures.find(f=>!f.hidden&&f.querySelector('a')?.hash===previousHash);target?.querySelector('a').focus({preventScroll:true})}}
   else if(wasInfo||wasArchive){window.scrollTo(0,0)}
  }
  const footerPageLabel=(project?project.title.toLowerCase():isInfo?'info':isArchive?'archief':'index')+' / 219';
  const footerPage=document.querySelector('#footer-page');if(footerPage.textContent!==footerPageLabel)footerPage.textContent=footerPageLabel;
- document.querySelector('.colophon a').href=project?location.hash:isInfo?'#info':isArchive?'#archief':'#werk';livingHome.updateFooterAction();
+ document.querySelector('.colophon a').href=project?location.hash:isInfo?'#info':isArchive?'#archief':'#werk';
  for(const link of document.querySelectorAll('header nav a')){const selected=link.hash===(project?projectReturnHash:isInfo?'#info':isArchive?'#archief':'#werk');if(selected)link.setAttribute('aria-current','page');else link.removeAttribute('aria-current')}
  previousHash=location.hash;window.PortfolioColorTransition?.afterRoute(project);
 }
@@ -43,11 +44,11 @@ function route(initial=false){
 document.addEventListener('click',event=>{const link=event.target.closest('a');if(!link||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;if((currentProject||document.body.classList.contains('info-open')||document.body.classList.contains('archive-open'))&&link.matches('.colophon a')){event.preventDefault();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});return}if(!currentProject&&link.hash.startsWith('#/project/')){homeScroll=window.scrollY;homeFocusPhotoId=link.closest('.photo')?.dataset.photoId;}if(link.hash===location.hash&&['#werk','#info','#contact','#archief'].includes(link.hash)){event.preventDefault();route();if(link.hash==='#werk')window.scrollTo(0,0)}});
 window.addEventListener('hashchange',()=>route());
 fullImage.addEventListener('error',()=>{fullImage.hidden=true;document.querySelector('#image-error').hidden=false});document.querySelector('#close').addEventListener('click',()=>dialog.close());document.querySelector('#prev').addEventListener('click',()=>showPhoto(active-1));document.querySelector('#next').addEventListener('click',()=>showPhoto(active+1));dialog.addEventListener('close',()=>{document.body.style.overflow='';lastFocus?.focus()});dialog.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'){e.preventDefault();showPhoto(active-1)}if(e.key==='ArrowRight'){e.preventDefault();showPhoto(active+1)}});
-function reorderFigures(){livingHome.select(PortfolioProjects.sortedProjects('newest','all'));}
+function reorderFigures(){livingHome.select();}
 // Measure the restored archive synchronously; no temporary layout is painted.
 window.PortfolioArchiveReturn={prepare(photo){
  const y=scrollY,wasHomeHidden=homePage.hidden,wasProjectHidden=projectPage.hidden,wasFooterHidden=footer.hidden,wasProject=document.body.classList.contains('project-open');
- document.body.classList.remove('project-open');document.body.classList.add('living-home');homePage.hidden=false;projectPage.hidden=true;footer.hidden=false;lastWidth=0;layout();
+ document.body.classList.remove('project-open');document.body.classList.add('living-home');homePage.hidden=false;projectPage.hidden=true;footer.hidden=false;layout();
  const rect=photo?.getBoundingClientRect();
  let targetScroll=Math.max(0,Math.min(homeScroll,document.documentElement.scrollHeight-innerHeight));
  if(rect){const center=rect.top+scrollY+rect.height/2;if(center-targetScroll<40||center-targetScroll>innerHeight-70)targetScroll=Math.max(0,Math.min(center-innerHeight/2,document.documentElement.scrollHeight-innerHeight));}
@@ -57,17 +58,3 @@ window.PortfolioArchiveReturn={prepare(photo){
 }};
 
 reorderFigures();route(true);
-
-
-
-document.fonts.ready.then(()=>{if(!currentProject){lastWidth=0;layout()}});
-
-
-
-
-
-
-
-
-
-

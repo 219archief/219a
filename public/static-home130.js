@@ -10,6 +10,6 @@ window.PortfolioLiving={create({canvas,figures,photos}){
   canvas.style.height=result.height+'px';window.dispatchEvent(new Event('portfolio-composition-change'));
  }
  function select(){orderedPhotos=PortfolioProjects.sortedPhotos(photos,'newest','all').filter(photo=>PortfolioProjects.projectForPhoto(photo.id).homeEnabled!==false);figures.forEach(figure=>{figure.hidden=!orderedPhotos.some(photo=>photo.id===figure.dataset.photoId)});document.querySelector('.archive-end>span:last-child').textContent=String(orderedPhotos.length).padStart(3,'0')+' observaties';lastWidth=0;layout(true)}
- document.fonts.ready.then(()=>layout(true));window.addEventListener('resize',()=>layout(true));
- return{layout,select,updateFooterAction(){}};
+ document.fonts.ready.then(()=>layout(true));
+ return{layout,select};
 }};

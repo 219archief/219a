@@ -133,9 +133,8 @@
     overlay.style.opacity = opacity;
         overlay.hidden = false;effect.hidden=false;effect.style.cssText=overlay.style.cssText;
     const left=rect.left-pad,top=rect.top-pad,w=parseFloat(overlay.style.width),h=parseFloat(overlay.style.height);
-    const images=document.querySelector('.project-color-overlay')?.querySelectorAll('.project-transition-photo')||document.querySelectorAll('.photo img,.project-row img');
     const boxes=[];
-    for(const img of images){if(!img.complete||!img.naturalWidth||!img.getClientRects().length||ancestorOpacity(img)<.001)continue;const actual=img.getBoundingClientRect(),clip=img.closest('.project-row button')?.getBoundingClientRect();const r=clip?{left:Math.max(actual.left,clip.left),top:Math.max(actual.top,clip.top),right:Math.min(actual.right,clip.right),bottom:Math.min(actual.bottom,clip.bottom)}:actual;const x=Math.max(left,r.left)-left,y=Math.max(top,r.top)-top,right=Math.min(left+w,r.right)-left,bottom=Math.min(top+h,r.bottom)-top;if(right>x&&bottom>y)boxes.push({x,y,r:right,b:bottom})}
+    for(const r of window.PortfolioImageBounds.get()){const x=Math.max(left,r.left)-left,y=Math.max(top,r.top)-top,right=Math.min(left+w,r.right)-left,bottom=Math.min(top+h,r.bottom)-top;if(right>x&&bottom>y)boxes.push({x,y,r:right,b:bottom})}
     // The photo union is intersected with glyph alpha, rather than rectangular clipping.
     const imageKey=JSON.stringify([entry.signature,boxes]);
     if(entry.imageKey!==imageKey){
@@ -170,7 +169,7 @@
     frame = 0;
     const force = dirty;
     dirty = false;
-    discover();
+    if(force)discover();
     entries.forEach(entry => paint(entry, force));
     if (performance.now() < settlingUntil || document.querySelector('.photo.is-zooming,.project-row figure.is-zooming,.project-color-overlay')) schedule();
   }

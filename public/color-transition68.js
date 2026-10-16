@@ -100,14 +100,15 @@
    root.classList.add('color-transition-committing');state.committing=true;
    const routed=new Promise(resolve=>state.resolveRoute=resolve);
    commit();await routed;
-   getComputedStyle(root).backgroundColor;
+   getComputedStyle(root).getPropertyValue('background-color');
    await frame();await frame();
   }finally{finish(state)}
  }
  // Router adapter: native Back/Forward gets the same reveal as ordinary links.
  function beforeRoute(project,initial,resume){
-  if(initial||active?.committing||location.hash==='#archief')return false;
+  if(initial||active?.committing)return false;
   if(active){finish(active);return false}
+  if(location.hash==='#archief')return false;
   if(respectReduce()||!crossesOverview(project))return false;
   void run(project,project?projectOrigin(project):origin(),resume);return true;
  }

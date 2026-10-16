@@ -3,8 +3,8 @@
  const FADE_MS=220;
  const dialog=document.querySelector('dialog'),stage=document.querySelector('.viewer-image'),image=document.querySelector('#full-image');
  const loading=document.querySelector('#viewer-loading'),error=document.querySelector('#image-error');
- let generation=0,effects=[],outgoing;
- function clearEffects(){effects.forEach(effect=>effect.cancel());effects=[];outgoing?.remove();outgoing=undefined}
+ let generation=0,effects=[];
+ function clearEffects(){effects.forEach(effect=>effect.cancel());effects=[];}
  function reset(){generation++;clearEffects();stage.classList.remove('is-loading','has-viewer-photo');stage.setAttribute('aria-busy','false');loading.hidden=true;image.hidden=true;error.hidden=true}
  function labels(photo,index,total,year){document.querySelector('#full-caption').textContent=`${photo.place} — ${year}`;const counter=document.querySelector('#viewer-count');counter.textContent=`${index+1} / ${total}`;counter.setAttribute('aria-label',`foto ${index+1} van ${total}`);const position=document.querySelector('#viewer-position');position.replaceChildren();position.hidden=total>12||total<2;if(!position.hidden)for(let i=0;i<total;i++){const mark=document.createElement('i');if(i===index)mark.className='is-current';position.append(mark)}}
  async function show({photo,index,total,year,src}){
@@ -15,17 +15,11 @@
   try{
    await prepared.decode();if(current!==generation)return;
    clearEffects();
-   if(hasPhoto){
-    const bounds=image.getBoundingClientRect(),parent=stage.getBoundingClientRect();
-    outgoing=image.cloneNode(false);outgoing.removeAttribute('id');outgoing.alt='';outgoing.setAttribute('aria-hidden','true');outgoing.className='viewer-photo-outgoing';
-    Object.assign(outgoing.style,{left:bounds.left-parent.left+'px',top:bounds.top-parent.top+'px',width:bounds.width+'px',height:bounds.height+'px'});stage.append(outgoing);
-   }
    image.src=src;image.alt=photo.alt;image.hidden=false;await image.decode();if(current!==generation)return;
    labels(photo,index,total,year);stage.classList.remove('is-loading');stage.classList.add('has-viewer-photo');stage.setAttribute('aria-busy','false');loading.hidden=true;
    const animate=!hasPhoto&&(!matchMedia('(prefers-reduced-motion: reduce)').matches||window.PortfolioColorTransition?.settings.respectReducedMotion===false);
    if(animate&&typeof image.animate==='function'){
     effects=[image.animate([{opacity:0},{opacity:1}],{duration:FADE_MS,easing:'ease-in-out',fill:'both'})];
-    if(outgoing)effects.push(outgoing.animate([{opacity:1},{opacity:0}],{duration:FADE_MS,easing:'ease-in-out',fill:'both'}));
     await Promise.all(effects.map(effect=>effect.finished.catch(()=>{})));if(current!==generation)return;
    }
    clearEffects();

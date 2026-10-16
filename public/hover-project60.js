@@ -2,7 +2,7 @@
 (function(){const selector='.photo>a,.project-row button',states=new WeakMap();let active;
 function zoomGeometry(rect,viewport,height=window.innerHeight){
  const maxWidth=viewport*.5,maxHeight=Math.max(1,height-94);
- const scale=Math.max(1,Math.min(maxWidth/rect.width,maxHeight/rect.height));
+ const scale=Math.min(Math.max(1,maxWidth/rect.width),maxHeight/rect.height);
  const margin=viewport*(viewport<600?.06:.04),top=24,bottom=70;
  const centerX=rect.left+rect.width/2,centerY=rect.top+rect.height/2;
  const halfWidth=rect.width*scale/2,halfHeight=rect.height*scale/2;
@@ -16,7 +16,7 @@ function animate(item,to,growing){
  const img=item.querySelector('img');if(!img)return;
  const project=!!item.closest('.project-row'),reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
  let state=states.get(item);if(!state){state={value:{scale:1,shift:0,shiftY:0,rotation:0},frame:0};states.set(item,state)}
- cancelAnimationFrame(state.frame);const from={...state.value},started=performance.now();const duration=project?(growing?Math.abs(to.scale-from.scale)/.03*10000:3000):(reduced?180:1200);img.style.transition='none';
+ cancelAnimationFrame(state.frame);item.closest('figure')?.classList.add('is-zooming');const from={...state.value},started=performance.now();const duration=project?(growing?Math.abs(to.scale-from.scale)/.03*10000:3000):(reduced?180:1200);img.style.transition='none';
  function tick(now){
   if(!img.isConnected){state.frame=0;return}
   const elapsed=Math.max(0,now-started),wobble=project&&growing&&!reduced;
@@ -26,7 +26,7 @@ function animate(item,to,growing){
   if(wobble){state.value.shift+=.7*Math.sin(phase)*t;state.value.shiftY+=.7*Math.sin(phase)*t;state.value.rotation+=.15*Math.sin(phase)*t}
   img.style.transform=`translate(${state.value.shift}px,${state.value.shiftY}px) scale(${state.value.scale}) rotate(${state.value.rotation}deg)`;
   if(progress<1||(wobble&&item.classList.contains('is-hovered')))state.frame=requestAnimationFrame(tick);
-  else{state.frame=0;if(!growing&&!item.classList.contains('is-hovered'))item.closest('figure')?.classList.remove('is-zooming')}
+  else{state.frame=0;if(!project||!growing&&!item.classList.contains('is-hovered'))item.closest('figure')?.classList.remove('is-zooming')}
  }
  state.frame=requestAnimationFrame(tick);
 }

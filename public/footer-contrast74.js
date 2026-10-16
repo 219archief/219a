@@ -129,9 +129,8 @@
     overlay.style.opacity = opacity;
         overlay.hidden = false;effect.hidden=false;effect.style.cssText=overlay.style.cssText;
     const left=rect.left-pad,top=rect.top-pad,w=parseFloat(overlay.style.width),h=parseFloat(overlay.style.height);
-    const images=document.querySelector('.project-color-overlay')?.querySelectorAll('.project-transition-photo')||document.querySelectorAll('.photo img,.project-row img');
     const boxes=[];
-    for(const img of images){if(!img.complete||!img.naturalWidth||!img.getClientRects().length||ancestorOpacity(img)<.001)continue;const actual=img.getBoundingClientRect(),clip=img.closest('.project-row button')?.getBoundingClientRect();const r=clip?{left:Math.max(actual.left,clip.left),top:Math.max(actual.top,clip.top),right:Math.min(actual.right,clip.right),bottom:Math.min(actual.bottom,clip.bottom)}:actual;const x=Math.max(left,r.left)-left,y=Math.max(top,r.top)-top,right=Math.min(left+w,r.right)-left,bottom=Math.min(top+h,r.bottom)-top;if(right>x&&bottom>y)boxes.push({x,y,r:right,b:bottom})}
+    for(const r of window.PortfolioImageBounds.get()){const x=Math.max(left,r.left)-left,y=Math.max(top,r.top)-top,right=Math.min(left+w,r.right)-left,bottom=Math.min(top+h,r.bottom)-top;if(right>x&&bottom>y)boxes.push({x,y,r:right,b:bottom})}
     const ys=[...new Set(boxes.flatMap(r=>[r.y,r.b]))].sort((a,b)=>a-b),parts=[];
     const n=v=>Number(v.toFixed(3)),pathRect=(x,y,r,b)=>`M${n(x)} ${n(y)}H${n(r)}V${n(b)}H${n(x)}Z`;
     for(let i=0;i<ys.length-1;i++){const y=ys[i],b=ys[i+1],spans=boxes.filter(r=>r.y<=y&&r.b>=b).map(r=>[r.x,r.r]).sort((a,b)=>a[0]-b[0]);let merged;for(const span of spans){if(merged&&span[0]<=merged[1])merged[1]=Math.max(merged[1],span[1]);else{if(merged)parts.push(pathRect(merged[0],y,merged[1],b));merged=[...span]}}if(merged)parts.push(pathRect(merged[0],y,merged[1],b))}
@@ -153,7 +152,7 @@
     frame = 0;
     const force = dirty;
     dirty = false;
-    discover();
+    if(force)discover();
     entries.forEach(entry => paint(entry, force));
     if (performance.now() < settlingUntil || document.querySelector('.photo.is-zooming,.project-row figure.is-zooming,.project-color-overlay')) schedule();
   }
