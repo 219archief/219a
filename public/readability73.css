@@ -1,0 +1,9 @@
+/* Readability pass only: keep the established colors, layout and effects. */
+:root{--type-meta:11px;--type-footnote:11px;--type-body:16px;color:var(--page-ink,#161616)}
+dialog{color:var(--page-ink,#161616)}
+figcaption{font-size:12px;line-height:1.5}
+figcaption .number{font-size:var(--type-meta)}
+.colophon{font-size:var(--type-footnote)}
+.project-description{font-size:14px;line-height:1.7}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline-color:currentColor}
+@media(max-width:599px){:root{--type-body:15px;--type-navigation:12px}.project-description{font-size:14px}}

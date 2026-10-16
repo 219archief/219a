@@ -1,0 +1,38 @@
+header>.sort-bar{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:flex-end}
+.living-list{position:relative;font-size:13px;line-height:1.5}.living-list summary{list-style:none;min-height:36px;display:flex;align-items:center;gap:12px;white-space:nowrap}.living-list summary::-webkit-details-marker{display:none}
+.living-projects{position:absolute;right:0;top:calc(100% + 8px);width:310px;max-width:88vw;max-height:min(55vh,440px);overflow:auto;background:#faf9f6;padding:14px 18px;overscroll-behavior:contain}
+.living-projects a{display:flex;justify-content:space-between;gap:20px;padding:12px 0;font-size:12px;line-height:1.5}.living-projects a span:last-child{font-size:11px;color:#686866}.living-projects a:hover{opacity:.6}
+.living-slot{animation:none!important;transition:none!important}.living-placeholder{position:absolute;margin:0;pointer-events:none;background:#000;z-index:1}.living-slot figcaption .series-label{display:none}.living-slot figcaption .caption-place{font-size:11px}
+@media(max-width:599px){header>.sort-bar{gap:4px 18px;align-items:center}.living-list{font-size:12px}.living-projects{position:absolute;right:0}}
+
+/* Only home is a single viewport canvas; project and info pages retain normal scrolling. */
+body.living-home{min-height:100dvh}
+.living-home header{position:absolute;height:0;min-height:0;padding:0}
+.living-home #werk{height:100dvh}
+.living-home .archive-end,.living-home .archive-footer{display:none}
+.living-home .intro{top:clamp(170px,31vh,360px)}
+.living-home .living-slot figcaption{flex-wrap:nowrap;line-height:14px;gap:6px;padding-top:7px}
+.living-home .living-slot .caption-place{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:599px){
+ .living-home .identity{width:72px;top:20px}
+ .living-home .intro{position:absolute;top:100px;left:6vw;width:70%;max-width:70%;font-size:14px;line-height:1.3}
+ .living-home .intro small{font-size:8px;line-height:1.4;margin-top:10px}
+ .living-home header>.sort-bar{position:absolute;top:235px;left:6vw;right:6vw;width:auto;max-width:88vw;margin:0;gap:0 15px}
+ .living-home .living-list{font-size:10px}
+ .living-home .living-slot .caption-place{font-size:8px}
+ .living-home .living-slot figcaption .number{font-size:8px}
+}
+@media(max-height:650px) and (max-width:599px){
+ .living-home .intro{top:85px;font-size:12px;line-height:1.2}
+ .living-home .intro small{margin-top:6px;font-size:7px}
+ .living-home header>.sort-bar{top:160px}
+ .living-home .identity{width:58px;top:16px}
+}
+@media(min-width:600px) and (max-height:650px){.living-home .intro{top:140px;font-size:17px}.living-home .intro small{margin-top:12px}.living-home .identity{width:120px}}
+@media(max-width:599px){.living-home .living-list{position:static}.living-home .living-projects{right:0;max-height:calc(100dvh - 350px)}}
+
+/* The introduction is the fixed centre of the composition, at every breakpoint. */
+.living-home header>.intro{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:max-content;max-width:min(34ch,36vw);text-align:center;margin:0}
+@media(max-width:599px){.living-home header>.intro{left:50%;top:50%;width:76vw;max-width:76vw}.living-home header>.sort-bar{top:90px}.living-home .living-projects{max-height:calc(100dvh - 230px)}}
+
+.footer-action{display:inline-flex;align-items:center;gap:7px}.footer-shuffle-icon{display:none;flex:none;shape-rendering:crispEdges}.living-home .footer-shuffle-icon{display:block}.living-home .footer-up-icon{display:none}

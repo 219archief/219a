@@ -1,0 +1,66 @@
+/* Final detail pass: keep the archive's composition, imagery and motion intact. */
+:root{--detail-size:10px;--reading-leading:1.6;--gallery-gap:40px}
+figcaption{font-size:var(--detail-size);line-height:1.5;padding-top:10px;align-items:baseline}
+figcaption .number,.project-year{font-size:var(--detail-size);color:inherit;font-variant-numeric:tabular-nums;white-space:nowrap}
+.project-page:focus{outline:none}
+.project-heading{margin-bottom:72px}
+.project-heading h1{line-height:1.12;margin:32px 0 20px;letter-spacing:-.035em;text-wrap:balance}
+.project-year{margin:0 0 24px;line-height:1.5}
+.project-intro{line-height:var(--reading-leading)}
+.project-description{font-size:13px;line-height:1.75}
+.project-description summary{min-height:36px;align-items:center;font-size:11px}
+.project-description-content{margin-top:16px}
+.project-gallery,.project-row{gap:var(--gallery-gap)}
+.project-navigation{margin-top:72px;align-items:baseline;line-height:1.5}
+.project-navigation a{padding:10px 0;max-width:48%;text-wrap:balance}
+.project-navigation a:last-child{text-align:right}
+.sort-bar{font-size:10px;line-height:1.5}
+.sort-bar button{min-height:36px;opacity:.68;transition:opacity 160ms ease}
+.sort-bar button[aria-pressed=true],.sort-bar button:hover,.sort-bar button:focus-visible{opacity:1}
+.about{padding-bottom:96px}
+.about p{line-height:1.35;text-wrap:pretty}
+.eyebrow{line-height:1.5}
+.contact small{line-height:1.7;max-width:30ch}
+.colophon{line-height:1.5;align-items:baseline}
+.colophon>a{white-space:nowrap}
+/* A loading cue and position indicator complete the existing photo viewer. */
+.viewer{padding-top:max(20px,env(safe-area-inset-top));padding-bottom:max(20px,env(safe-area-inset-bottom));gap:4px}
+.viewer-top{display:grid;grid-template-columns:1fr auto 1fr;line-height:1.5}
+.viewer-top>button{justify-self:end}
+#viewer-count{font-variant-numeric:tabular-nums;white-space:nowrap}
+.viewer button{min-height:44px;padding:12px 10px}
+.viewer-top>button{margin-right:-10px}
+.viewer-image{position:relative}
+#full-image{opacity:1;transition:opacity 180ms ease}
+.viewer-image.is-loading #full-image{opacity:0}
+#viewer-loading{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);margin:0;font-size:11px;line-height:1.5;pointer-events:none;white-space:nowrap}
+.viewer-bottom{line-height:1.5;align-items:center}
+.viewer-bottom>div{display:flex;gap:8px;margin-right:-10px}
+#full-caption{min-width:0;text-wrap:balance}
+@media(max-width:599px){
+ :root{--gallery-gap:24px}
+ .project-heading{margin-bottom:48px}
+ .project-intro{font-size:14px}
+ .project-description{font-size:12px}
+ .project-navigation{margin-top:48px;gap:24px}
+ .sort-bar{font-size:10px;gap:12px}
+ .about{padding-bottom:72px}
+ .colophon{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 16px;align-items:center;font-size:9px}
+ .colophon>span:nth-child(2){display:none}
+ .colophon>a{justify-self:end}
+ .viewer{padding:16px 5vw max(16px,env(safe-area-inset-bottom))}
+ .viewer-top,.viewer-bottom{font-size:10px}
+ .viewer-bottom{display:flex;flex-wrap:wrap;gap:4px 16px}
+ #full-caption{flex:1 1 100%;font-size:11px}
+ .viewer-bottom>div{margin-left:auto;gap:16px}
+ .viewer-image{padding:12px 0}
+}
+@media(any-pointer:coarse){
+ header>nav a,.sort-bar button,.back-link,.project-description summary,.project-navigation a,.colophon a{min-height:44px;display:inline-flex;align-items:center}
+ .project-navigation a:last-child{justify-content:flex-end}
+}
+@media(prefers-reduced-motion:reduce){#full-image,.sort-bar button{transition:none}}
+
+
+/* Keep the sort controls above the transparent canvas on tablet and desktop. */
+header>.sort-bar{z-index:4}

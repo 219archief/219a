@@ -1,0 +1,4 @@
+/* Fixed navigation shares the logo's gradual scroll transition. */
+header>nav{position:fixed;z-index:110;scale:1.2;transform-origin:top right;transition:scale 480ms ease-in-out;will-change:scale}
+/* Enlarge only the project return link; preserve every other type level. */
+#project .back-link{font-size:calc(var(--type-label,11px) * 1.35)}

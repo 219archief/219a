@@ -1,0 +1,3 @@
+/* A fixed menu, anchored at the same top-right position at both sizes. */
+header>nav{position:fixed;z-index:110;scale:1.2;transform-origin:top right;transition:scale 480ms ease-in-out;will-change:scale}
+@media(prefers-reduced-motion:reduce){header>nav{transition:none}}

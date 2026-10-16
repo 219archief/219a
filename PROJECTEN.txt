@@ -1,0 +1,28 @@
+Projecten beheren
+
+Bestand: dist/projects.js
+- title: projectnaam
+- background: standaard achtergrondkleur (hex), voor alle bezoekers na publicatie
+- photoIds: de foto's in dit project, in gewenste volgorde
+
+De foto-ID's en natuurlijke verhoudingen staan in dist/layout.js.
+Elke foto op de homepage verwijst naar het project waarin de foto is opgenomen.
+
+De kleurkiezer op de projectpagina bewaart een persoonlijke kleur per project
+in deze browser via localStorage. Deze keuze blijft na herladen bestaan.
+Voor dezelfde standaardkleur voor iedereen: wijzig background in projects.js
+of vraag om de standaardkleur aan te passen en de website opnieuw te publiceren.
+
+Projectlinks: #/project/binnen-en-buiten, #/project/ontmoetingen,
+#/project/langs-de-kust. Deze links werken ook rechtstreeks en met browser-terug.
+
+Liggende foto's staan over de hele rasterbreedte. Twee opeenvolgende staande
+foto's delen een rij. Op mobiel komen de foto's onder elkaar. De oorspronkelijke
+beeldverhoudingen blijven behouden. Een losse staande foto houdt een halve rij
+op desktop, zodat deze niet onnodig wordt uitvergroot.
+
+Projectjaren en sortering
+- year in dist/projects.js bepaalt het getoonde jaar en de chronologische sortering.
+- Huidige jaartallen zijn op verzoek tijdelijke voorbeeldjaren: 2020, 2022, 2024.
+- Het overzicht opent standaard van nieuw naar oud.
+- Het sorteerbalkje verandert de volgorde zonder het vrije karakter te verliezen.

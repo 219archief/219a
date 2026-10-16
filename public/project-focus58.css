@@ -1,0 +1,2 @@
+/* Toetsenbordfocus toont het icoon, zonder de oude snelle 4%-zoom. */
+.project-row button:focus-visible:not(.is-hovered) img{transform:none}

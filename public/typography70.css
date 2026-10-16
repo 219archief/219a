@@ -1,0 +1,38 @@
+/* Shared type levels: expressive titles, readable copy, quiet navigation and metadata. */
+:root{
+ --type-title:clamp(32px,4vw,56px);--type-body:15px;--type-navigation:13px;
+ --type-label:11px;--type-meta:10px;--type-footnote:9px;
+ --leading-title:1.12;--leading-copy:1.6;--leading-detail:1.5;
+ --space-title:32px;--space-meta:24px;--space-caption:10px;
+ --space-opening:clamp(48px,6vw,88px);--viewer-margin:4vw;
+}
+header>nav{font-size:var(--type-navigation);line-height:var(--leading-detail)}
+figcaption,.project-year,.sort-bar,.archive-end,.intro small{font-size:var(--type-meta);line-height:var(--leading-detail)}
+figcaption{padding-top:var(--space-caption)}
+figcaption .number{font-size:inherit}
+.back-link,.project-navigation,.project-description summary,.eyebrow{font-size:var(--type-label);line-height:var(--leading-detail)}
+.project-heading{margin-bottom:var(--space-opening)}
+.project-heading h1{font-size:var(--type-title);line-height:var(--leading-title);min-height:1.12em;margin:var(--space-title) 0 16px}
+.project-year{margin:0 0 var(--space-meta)}
+.project-intro{font-size:var(--type-body);line-height:var(--leading-copy);min-height:3.2em;margin:0 0 16px;max-width:44ch;text-wrap:pretty}
+.project-description{font-size:13px;line-height:var(--leading-copy)}
+.project-description summary{min-height:44px}
+.project-opening-row{grid-template-columns:minmax(0,1fr)}
+.project-opening-row>figure{grid-column:1/-1}
+.colophon{font-size:var(--type-footnote)}
+/* The photograph stays visible until the replacement is decoded. */
+.viewer{padding-left:var(--viewer-margin);padding-right:var(--viewer-margin)}
+.viewer-top,.viewer-bottom{font-size:var(--type-label);line-height:var(--leading-detail)}
+#full-image{transition:none}
+.viewer-image.has-viewer-photo.is-loading #full-image{opacity:1}
+.viewer-image.has-viewer-photo #viewer-loading{top:auto;bottom:0;transform:translateX(-50%);font-size:var(--type-meta)}
+.viewer-photo-outgoing{position:absolute;display:block;object-fit:contain;max-width:none;max-height:none;z-index:1;pointer-events:none}
+@media(max-width:599px){
+ :root{--type-title:30px;--type-body:14px;--type-navigation:11px;--space-opening:48px;--viewer-margin:5vw}
+ .project-heading h1{min-height:1.12em}
+ .project-description{font-size:12px}
+ .viewer-top,.viewer-bottom{font-size:var(--type-meta)}
+}
+
+@media(max-width:359px){:root{--type-title:28px}}
+

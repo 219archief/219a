@@ -1,0 +1,49 @@
+/* Five restrained archive details; no new global overlay or photography effect. */
+.photo figcaption{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px;row-gap:4px;align-items:baseline}
+.photo .series-label{grid-column:1/-1;display:flex;align-items:center;gap:7px;font-size:11px;line-height:1.5;letter-spacing:0;min-width:0}
+.series-label::before{content:'';display:block;width:1px;height:8px;background:var(--series-color,currentColor);flex:none}
+.pixel-symbol{display:block;width:16px;height:16px;flex:none;shape-rendering:crispEdges;pointer-events:none}
+.pixel-control{display:inline-flex;align-items:center;gap:9px}
+.contact-actions button.pixel-control span{margin-left:0;transform:none}
+.pixel-control .pixel-symbol{transition:transform 160ms ease}
+@media(hover:hover){.pixel-control:hover>.pixel-symbol{transform:translateX(1px)}.contact-actions .pixel-control:hover>.pixel-symbol{transform:translate(1px,-1px)}}
+.photo>a.has-return-mark::before,.photo>a.has-return-mark::after{content:'';position:absolute;width:9px;height:9px;pointer-events:none;border-color:var(--project-accent,#161616);border-style:solid;animation:return-mark 700ms ease both}
+.photo>a.has-return-mark::before{left:-6px;top:-6px;border-width:1px 0 0 1px}
+.photo>a.has-return-mark::after{right:-6px;bottom:-6px;border-width:0 1px 1px 0}
+@keyframes return-mark{0%{opacity:0}15%,75%{opacity:1}100%{opacity:0}}
+.viewer-counter{text-align:center;justify-self:center;line-height:1.5}
+#viewer-position{display:flex;justify-content:center;gap:4px;margin-top:7px;min-height:5px}
+#viewer-position[hidden]{display:none}
+#viewer-position i{display:block;box-sizing:border-box;width:8px;height:5px;border:1px solid currentColor;opacity:.65}
+#viewer-position i.is-current{background:currentColor;opacity:1}
+.contact-status[data-state=success]{border:0;padding-left:0}
+.contact-receipt{display:table;position:relative;font-size:10px;line-height:1.6;letter-spacing:.03em;margin-bottom:12px;padding-bottom:5px;animation:receipt-in 160ms ease both}
+.contact-receipt::after{content:'';position:absolute;bottom:0;left:0;width:42px;height:2px;background:currentColor;clip-path:polygon(0 25%,18% 0,35% 25%,57% 8%,76% 35%,100% 10%,100% 85%,73% 100%,51% 75%,32% 95%,10% 70%,0 90%)}
+@keyframes receipt-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.pixel-control .pixel-symbol{transition:none}.has-return-mark::before,.has-return-mark::after,.contact-receipt{animation:none!important}}
+.photo>a{position:relative}
+
+/* The additional selected ideas share the same quiet graphic vocabulary. */
+.photo .series-label::after{content:'';display:block;width:12px;height:1px;flex:none;background:currentColor;opacity:0;transition:opacity 160ms ease}
+.photo.is-series-related .series-label::after{opacity:1}
+header>nav>a{position:relative}
+header>nav>a::after{content:'';position:absolute;left:50%;bottom:1px;width:4px;height:4px;background:currentColor;transform:translateX(-50%);opacity:0;pointer-events:none}
+header>nav>a[aria-current=page]::after{opacity:1}
+.project-year{display:flex;align-items:center;gap:8px}
+.project-year::before{content:'';width:1px;height:7px;background:currentColor;flex:none}
+.viewer-direction{position:absolute;top:var(--direction-y,50%);transform:translateY(-50%);opacity:0;pointer-events:none;transition:opacity 120ms ease}
+.viewer-direction--left{left:0}.viewer-direction--right{right:0}
+.viewer-direction[hidden]{display:none}
+@media(hover:hover){.viewer-image[data-direction=left] .viewer-direction--left,.viewer-image[data-direction=right] .viewer-direction--right{opacity:.8}}
+#viewer-loading::before,#viewer-loading::after{content:'';position:absolute;width:7px;height:6px;border:solid currentColor;pointer-events:none}
+#viewer-loading::before{left:-7px;top:-5px;border-width:1px 0 0 1px}
+#viewer-loading::after{right:-7px;bottom:-5px;border-width:0 1px 1px 0}
+.project-description-content{position:relative;border-left:1px solid currentColor;padding-left:16px}
+.project-description-content::before{content:'';position:absolute;left:0;top:0;width:5px;border-top:1px solid currentColor}
+.contact-field label{position:relative}
+.contact-field label::before{content:'';position:absolute;left:-7px;top:.45em;width:1px;height:7px;background:currentColor;opacity:0;pointer-events:none}
+.contact-field:focus-within label::before{opacity:1}
+.project-end{display:flex;gap:9px;align-items:center;margin:44px 0 0;font-size:11px;line-height:1.5}
+.project-end::before{content:'';width:4px;height:4px;background:currentColor;flex:none}
+.project-end+.project-navigation{margin-top:32px}
+@media(prefers-reduced-motion:reduce){.series-label::after,.viewer-direction{transition:none}}

@@ -1,0 +1,6 @@
+/* Geen samengestelde clip-path op een backdrop-filter: alleen de logo-alfa. */
+.identity.logo-masks-ready::before{clip-path:none;mask-image:var(--logo-page-mask);-webkit-mask-image:var(--logo-page-mask);mask-size:100% 100%;-webkit-mask-size:100% 100%}
+.identity.logo-masks-ready::after{clip-path:none;mask-image:var(--logo-photo-mask);-webkit-mask-image:var(--logo-photo-mask);mask-size:100% 100%;-webkit-mask-size:100% 100%}
+
+/* Equal timing keeps the logo centre fixed throughout the 2% hover transition. */
+.identity{translate:var(--logo-hover-offset,0px 0px)!important;transition:scale 480ms ease-in-out,translate 480ms ease-in-out}

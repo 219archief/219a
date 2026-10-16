@@ -1,0 +1,3 @@
+/* De vaste footer kiest lichte of donkere inkt op de paginakleur. */
+.colophon{color:var(--footer-ink,#161616)}
+.footer-contrast-base{background:var(--footer-ink,#161616)}

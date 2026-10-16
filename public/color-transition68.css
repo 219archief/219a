@@ -1,0 +1,31 @@
+/* The overlay is a sibling of the pages and sits above the root background only. */
+.kleur-overlay{
+ position:fixed;inset:0;z-index:0;pointer-events:none;
+ --r:0px;--zacht:280px;
+ background:radial-gradient(circle at var(--x) var(--y),
+  var(--kleur) 0,
+  var(--kleur) max(0px,calc(var(--r) - var(--zacht))),
+  color-mix(in srgb,var(--kleur) 55%,transparent) max(0px,calc(var(--r) - var(--zacht)*.45)),
+  transparent var(--r));
+}
+/* Preserve the existing absolute header and fixed logo/menu/footer positions. */
+body>main,body>footer{position:relative;z-index:1}
+header>.intro,header>.sort-bar{z-index:1}
+html.color-transition-committing{transition:none!important}
+.color-transition-running #werk,.color-transition-running #project,
+.color-transition-running footer,.color-transition-running header>.intro,
+.color-transition-running header>.sort-bar{transition:opacity var(--color-content-fade,450ms) ease!important}
+.color-transition-fading #werk,.color-transition-fading #project,
+.color-transition-fading footer,.color-transition-fading header>.intro,
+.color-transition-fading header>.sort-bar{opacity:0}
+@media(prefers-reduced-motion:reduce){:root,dialog{transition:none!important}}
+
+
+/* Terugweg: de lichte kleur vult de randen, de transparante opening krimpt. */
+.kleur-overlay--return{
+ background:radial-gradient(circle at var(--x) var(--y),
+  transparent 0,
+  transparent max(0px,calc(var(--r) - var(--zacht))),
+  color-mix(in srgb,var(--kleur) 55%,transparent) max(0px,calc(var(--r) - var(--zacht)*.45)),
+  var(--kleur) var(--r));
+}

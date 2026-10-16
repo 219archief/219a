@@ -1,0 +1,5 @@
+header>.sort-bar{display:block;width:max-content;max-width:88vw;gap:0;z-index:8}
+.living-list .archive-chevron{width:5px;height:5px;border-right:1px solid currentColor;border-bottom:1px solid currentColor;transform:rotate(45deg);transition:transform 180ms ease}
+.living-list[open] .archive-chevron{transform:rotate(225deg)}
+@media(max-width:599px){header>.sort-bar{width:88vw;max-width:88vw;display:flex;justify-content:flex-end;align-items:flex-end;flex-direction:row}}
+@media(prefers-reduced-motion:reduce){.living-list .archive-chevron{transition:none}}
