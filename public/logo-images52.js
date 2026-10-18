@@ -1,42 +1,34 @@
-/* Eén alfamasker per laag voorkomt rechthoekige backdrop-filterartefacten. */
+/* Paint a persistent logo canvas: no changing mask URLs or backdrop-filter layers. */
 (function(){
  const logo=document.querySelector('.identity'),source=logo?.querySelector('img');if(!source)return;
  const canvas=document.createElement('canvas'),context=canvas.getContext('2d');if(!context)return;
- let frame=0,until=0,last='',stable=0,pending=false;
- function schedule(){until=performance.now()+600;stable=0;if(!frame)frame=requestAnimationFrame(update)}
- async function update(now){
-  frame=0;if(pending)return;if(!source.complete||!source.naturalWidth)return;
-  const box=logo.getBoundingClientRect(),w=logo.clientWidth,h=logo.clientHeight;if(!box.width||!box.height)return;
-  const sx=w/box.width,sy=h/box.height;
-  const rects=[];
-  for(const r of window.PortfolioImageBounds.get()){const x=Math.max(box.left,r.left),y=Math.max(box.top,r.top),right=Math.min(box.right,r.right),bottom=Math.min(box.bottom,r.bottom);if(right>x&&bottom>y)rects.push([(x-box.left)*sx,(y-box.top)*sy,(right-x)*sx,(bottom-y)*sy])}
-  const dpr=Math.min(devicePixelRatio||1,3),key=JSON.stringify([w,h,dpr,rects.map(r=>r.map(v=>Math.round(v*100)/100))]);
-  if(key!==last){pending=true;stable=0;
-   canvas.width=Math.ceil(w*dpr);canvas.height=Math.ceil(h*dpr);context.setTransform(dpr,0,0,dpr,0,0);
-   // Eerst de unie van de foto-uitsneden; daarna uitsluitend logo-alfa behouden.
-   context.fillStyle='#fff';for(const r of rects)context.fillRect(...r);
-   context.globalCompositeOperation='destination-in';context.drawImage(source,0,0,w,h);
-   const photoMask=canvas.toDataURL();
-   context.globalCompositeOperation='source-over';context.clearRect(0,0,w,h);context.drawImage(source,0,0,w,h);
-   // De zwarte laag krijgt precies de complementaire uitsnede.
-   context.globalCompositeOperation='destination-out';for(const r of rects)context.fillRect(...r);
-   const pageMask=canvas.toDataURL();
-   // Firefox may briefly clear a CSS mask while decoding its replacement.
-   // Keep both previous layers until both replacement textures are ready.
-   try{
-    await Promise.all([photoMask,pageMask].map(async url=>{const image=new Image();image.src=url;await image.decode()}));
-    logo.style.setProperty('--logo-photo-mask',`url("${photoMask}")`);
-    logo.style.setProperty('--logo-page-mask',`url("${pageMask}")`);
-    last=key;
-   }catch{ /* Retain the last complete masks if a decode fails. */ }
-   finally{pending=false}
-   context.globalCompositeOperation='source-over';logo.classList.add('logo-masks-ready');
-  }else stable++;
-  if(now<until||stable<10||document.querySelector('.photo.is-zooming,.project-row figure.is-zooming,.project-color-overlay'))frame=requestAnimationFrame(update);
+ canvas.className='logo-contrast-canvas';canvas.setAttribute('aria-hidden','true');logo.append(canvas);
+ let frame=0,until=0,last='';
+ function schedule(){until=performance.now()+600;if(!frame)frame=requestAnimationFrame(update)}
+ function update(now){
+  frame=0;if(!source.complete||!source.naturalWidth)return;
+  const box=logo.getBoundingClientRect(),w=logo.clientWidth,h=logo.clientHeight;if(!w||!h||!box.width||!box.height)return;
+  const sx=w/box.width,sy=h/box.height,dpr=Math.min(devicePixelRatio||1,3);
+  const images=window.PortfolioImageBounds.get().filter(r=>r.right>box.left&&r.left<box.right&&r.bottom>box.top&&r.top<box.bottom);
+  const key=JSON.stringify([w,h,dpr,box.width,box.height,...images.map(r=>[r.image?.currentSrc,r.left-box.left,r.top-box.top,r.right-box.left,r.bottom-box.top,r.opacity])]);
+  if(key!==last){
+   const pixelWidth=Math.ceil(w*dpr),pixelHeight=Math.ceil(h*dpr);
+   if(canvas.width!==pixelWidth||canvas.height!==pixelHeight){canvas.width=pixelWidth;canvas.height=pixelHeight}
+   context.setTransform(dpr,0,0,dpr,0,0);context.globalCompositeOperation='source-over';context.globalAlpha=1;context.filter='none';
+   context.clearRect(0,0,w,h);context.fillStyle='#000';context.fillRect(0,0,w,h);
+   for(const rect of images){
+    const image=rect.image,actual=rect.imageRect;if(!image||!actual)continue;
+    context.save();context.beginPath();context.rect((rect.left-box.left)*sx,(rect.top-box.top)*sy,(rect.right-rect.left)*sx,(rect.bottom-rect.top)*sy);context.clip();
+    context.globalAlpha=rect.opacity;context.filter='grayscale(1) invert(1)';
+    context.drawImage(image,(actual.left-box.left)*sx,(actual.top-box.top)*sy,actual.width*sx,actual.height*sy);context.restore();
+   }
+   context.filter='none';context.globalAlpha=1;context.globalCompositeOperation='destination-in';context.drawImage(source,0,0,w,h);
+   context.globalCompositeOperation='source-over';logo.classList.add('logo-canvas-ready');last=key;
+  }
+  if(now<until||document.querySelector('.photo.is-zooming,.project-row figure.is-zooming,.project-color-overlay'))frame=requestAnimationFrame(update);
  }
  for(const event of ['scroll','resize','hashchange','pageshow','pointerover','pointerout','project-background-ready','portfolio-composition-change'])window.addEventListener(event,schedule,{passive:true});
- document.addEventListener('load',e=>{if(e.target.tagName==='IMG')schedule()},true);
+ document.addEventListener('load',event=>{if(event.target.tagName==='IMG')schedule()},true);
  new MutationObserver(records=>{if(records.some(r=>r.type==='childList'||r.target.tagName==='IMG'||r.target.classList?.contains('project-color-overlay')))schedule()}).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['style','hidden','class']});
  schedule();
 })();
-

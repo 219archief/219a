@@ -11,7 +11,7 @@ window.PortfolioImageBounds=(()=>{
    if(opacity<.001)continue;
    const actual=image.getBoundingClientRect(),clip=image.closest('.project-row button')?.getBoundingClientRect();
    const rect=clip?{left:Math.max(actual.left,clip.left),top:Math.max(actual.top,clip.top),right:Math.min(actual.right,clip.right),bottom:Math.min(actual.bottom,clip.bottom)}:actual;
-   boxes.push(rect);
+   boxes.push({...rect,left:rect.left,top:rect.top,right:rect.right,bottom:rect.bottom,image,imageRect:actual,opacity});
   }
   return boxes;
  }

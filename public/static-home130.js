@@ -2,8 +2,7 @@
 window.PortfolioLiving={create({canvas,figures,photos}){
  const templates=new Map(figures.map(f=>[f.dataset.photoId,f])),pool=photos.filter(p=>templates.has(p.id));
  const reduced=matchMedia('(prefers-reduced-motion: reduce)'),live=new Map(),home=document.querySelector('#werk');
- let lanes=[],width=0,height=0,offset=0,target=0,frame=0,lastTime=0,seed=219,drag=null,suppressClickUntil=0,paused=false,lastInput=0,autoOverride=null;
- try{const saved=localStorage.getItem('219:automatic-motion')??sessionStorage.getItem('219:automatic-motion');if(saved==='true'||saved==='false'){autoOverride=saved==='true';localStorage.setItem('219:automatic-motion',saved)}}catch{}
+ let lanes=[],width=0,height=0,offset=0,target=0,frame=0,lastTime=0,seed=219,drag=null,suppressClickUntil=0,paused=false,lastInput=0,autoOverride=true;
  const mod=(v,n)=>((v%n)+n)%n,isHome=()=>!home.hidden&&!document.querySelector('dialog[open]');
  canvas.replaceChildren();canvas.tabIndex=0;canvas.setAttribute('role','region');
  canvas.setAttribute('aria-label','Fototentoonstelling. Scroll, veeg of gebruik de pijltjestoetsen om horizontaal te bladeren. Spatie pauzeert de automatische beweging.');
@@ -51,7 +50,7 @@ window.PortfolioLiving={create({canvas,figures,photos}){
   window.dispatchEvent(new Event('portfolio-composition-change'));
  }
  function stop(){cancelAnimationFrame(frame);frame=0;lastTime=0;target=offset;drag=null;canvas.classList.remove('is-dragging')}
- function autoEnabled(){return autoOverride??!reduced.matches}
+ function autoEnabled(){return autoOverride}
  function syncMotion(){
   const control=document.querySelector('.footer-action');
   if(home.hidden){control.removeAttribute('aria-pressed');return}
@@ -96,7 +95,7 @@ window.PortfolioLiving={create({canvas,figures,photos}){
  control.addEventListener('click',event=>{
   if(home.hidden)return;event.preventDefault();event.stopImmediatePropagation();
   autoOverride=!(autoEnabled()&&!paused);paused=false;stop();
-  try{localStorage.setItem('219:automatic-motion',String(autoOverride))}catch{}
+
   syncMotion();wake();
  });
  control.addEventListener('keydown',event=>{if(event.key===' '&&!home.hidden){event.preventDefault();control.click()}});
