@@ -22,3 +22,22 @@ body.living-home .archive-end,body.living-home .archive-footer{display:none}
 body.living-home .footer-shuffle-icon{display:block}
 body.living-home .footer-up-icon{display:none}
 .footer-action[aria-disabled=true]{opacity:.5}
+/* The central position now belongs to photography rather than the introduction. */
+body.living-home .intro{display:none}
+/* The viewport clips only the exhibition; fixed header/footer remain outside it. */
+body.living-home .canvas{overflow:clip;touch-action:none;overscroll-behavior:none;outline-offset:-5px}
+body.living-home .canvas .photo{left:0;top:0;animation:none;will-change:transform}
+body.living-home .canvas.is-dragging{user-select:none}
+body.living-home .canvas.is-dragging .photo>a{pointer-events:none}
+body.living-home .photo img{user-select:none;-webkit-user-drag:none}
+@media(max-width:699px){
+ body.living-home .photo figcaption .number{display:block}
+ body.living-home .photo figcaption{grid-template-columns:minmax(0,1fr) auto}
+}
+@media(max-width:699px) and (min-height:551px){body.living-home .canvas .photo .series-label{display:flex}}
+
+.footer-motion-icon{display:none}
+body.living-home .footer-motion-icon{display:block}
+/* Icon-only playback control; its accessible name remains on the link. */
+body.living-home .footer-action-label{display:none}
+body.living-home .footer-action{min-width:24px;min-height:32px;justify-content:center}

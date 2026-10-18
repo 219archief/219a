@@ -31,14 +31,15 @@ function route(initial=false){
  else if(isArchive){viewerPhotos=photos;PortfolioDirectory.render();document.title='archief — 219';window.scrollTo(0,0);if(!initial)archivePage.focus({preventScroll:true})}
  else{viewerPhotos=photos;document.title='219 — fotografisch archief';layout();
   if(isInfo){document.title='info & contact — 219';window.scrollTo(0,0);if(!initial)infoPage.focus({preventScroll:true});if(location.hash==='#contact')document.querySelector('#contact-form').scrollIntoView({block:'center'})}
-  else if(wasProject){window.scrollTo(0,homeScroll);if(!initial){const target=figures.find(f=>f.dataset.photoId===homeFocusPhotoId)||figures.find(f=>!f.hidden&&f.querySelector('a')?.hash===previousHash);target?.querySelector('a').focus({preventScroll:true})}}
+  else if(wasProject){window.scrollTo(0,homeScroll);if(!initial){const homeFigures=[...canvas.querySelectorAll('.photo')];const target=homeFigures.find(f=>f.dataset.photoId===homeFocusPhotoId&&f.getBoundingClientRect().right>0&&f.getBoundingClientRect().left<innerWidth)||homeFigures.find(f=>!f.hidden&&f.querySelector('a')?.hash===previousHash);target?.querySelector('a').focus({preventScroll:true})}}
   else if(wasInfo||wasArchive){window.scrollTo(0,0)}
  }
  const isHome=!project&&!isInfo&&!isArchive,action=document.querySelector('.footer-action'),label=action.querySelector('.footer-action-label');
- const actionText=isHome?'shuffle':'naar boven';
+ const actionText=isHome?'play':'naar boven';
  (label.querySelector('.honk-original')||label).textContent=actionText;
  label.dataset.text=actionText;
- if(isHome){action.setAttribute('role','button');action.setAttribute('aria-label','Shuffle de fotocompositie')}else{action.removeAttribute('role');action.removeAttribute('aria-label')}
+ if(isHome){action.setAttribute('role','button');action.setAttribute('aria-label','Start de automatische beweging')}else{action.removeAttribute('role');action.removeAttribute('aria-label')}
+ livingHome.syncMotion();
  const footerPageLabel=(project?project.title.toLowerCase():isInfo?'info':isArchive?'archief':'index')+' / 219';
  const footerPage=document.querySelector('#footer-page');if(footerPage.textContent!==footerPageLabel)footerPage.textContent=footerPageLabel;
  document.querySelector('.colophon a').href=project?location.hash:isInfo?'#info':isArchive?'#archief':'#werk';
