@@ -3,6 +3,7 @@
  const logo=document.querySelector('.identity'),source=logo?.querySelector('img');if(!source)return;
  const canvas=document.createElement('canvas'),context=canvas.getContext('2d');if(!context)return;
  canvas.className='logo-contrast-canvas';canvas.setAttribute('aria-hidden','true');logo.append(canvas);
+ const supportsFilter=typeof context.filter==='string';
  let frame=0,until=0,last='';
  function schedule(){until=performance.now()+600;if(!frame)frame=requestAnimationFrame(update)}
  function update(now){
@@ -19,8 +20,17 @@
    for(const rect of images){
     const image=rect.image,actual=rect.imageRect;if(!image||!actual)continue;
     context.save();context.beginPath();context.rect((rect.left-box.left)*sx,(rect.top-box.top)*sy,(rect.right-rect.left)*sx,(rect.bottom-rect.top)*sy);context.clip();
-    context.globalAlpha=rect.opacity;context.filter='grayscale(1) invert(1)';
+    context.globalAlpha=rect.opacity;context.filter=supportsFilter?'grayscale(1) invert(1)':'none';
     context.drawImage(image,(actual.left-box.left)*sx,(actual.top-box.top)*sy,actual.width*sx,actual.height*sy);context.restore();
+    // Safari versions without Canvas 2D filters need the same contrast in pixels.
+    if(!supportsFilter){
+     const x=Math.max(0,Math.floor((rect.left-box.left)*sx*dpr)),y=Math.max(0,Math.floor((rect.top-box.top)*sy*dpr));
+     const right=Math.min(canvas.width,Math.ceil((rect.right-box.left)*sx*dpr)),bottom=Math.min(canvas.height,Math.ceil((rect.bottom-box.top)*sy*dpr));
+     if(right>x&&bottom>y){const pixels=context.getImageData(x,y,right-x,bottom-y),data=pixels.data;
+      for(let i=0;i<data.length;i+=4){const gray=255-Math.round(.2126*data[i]+.7152*data[i+1]+.0722*data[i+2]);data[i]=data[i+1]=data[i+2]=gray}
+      context.putImageData(pixels,x,y);
+     }
+    }
    }
    context.filter='none';context.globalAlpha=1;context.globalCompositeOperation='destination-in';context.drawImage(source,0,0,w,h);
    context.globalCompositeOperation='source-over';logo.classList.add('logo-canvas-ready');last=key;
