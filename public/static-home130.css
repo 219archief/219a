@@ -41,3 +41,22 @@ body.living-home .footer-motion-icon{display:block}
 /* Icon-only playback control; its accessible name remains on the link. */
 body.living-home .footer-action-label{display:none}
 body.living-home .footer-action{min-width:24px;min-height:32px;justify-content:center}
+/* A relative scroll handle with no implied beginning or end. */
+.exhibition-scroll{display:none;position:fixed;z-index:130;left:50%;bottom:65px;transform:translateX(-50%);width:150px;text-align:center;color:var(--page-ink,#161616)}
+body.living-home .exhibition-scroll{display:block}
+.exhibition-scroll-track{display:block;position:relative;width:100%;height:36px;padding:0;border:0;background:none;color:inherit;touch-action:none;user-select:none}
+.exhibition-scroll-track::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:currentColor;opacity:.20}
+.exhibition-scroll-thumb{position:absolute;left:calc(50% - 14px);top:calc(50% - 1px);width:28px;height:2px;background:currentColor;transition:transform 300ms ease-in-out;pointer-events:none}
+.exhibition-scroll-track.is-dragging .exhibition-scroll-thumb{transition:none}
+.exhibition-scroll-hint{display:block;font:400 9px/1.4 'SUSE Mono',monospace;letter-spacing:.015em;opacity:.6;pointer-events:none}
+.exhibition-scroll-track:hover::before,.exhibition-scroll-track:focus-visible::before{opacity:.4}
+@media(max-width:699px){.exhibition-scroll{bottom:74px;width:120px}.exhibition-scroll-track{height:40px}.exhibition-scroll-hint{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.exhibition-scroll-thumb{transition:none}}
+
+/* Duplicate only the tiny marker at the edges, so its cyclic wrap is seamless. */
+.exhibition-scroll-window{position:absolute;left:0;right:0;top:calc(50% - 1px);height:2px;overflow:hidden;pointer-events:none}
+.exhibition-scroll-window .exhibition-scroll-thumb{top:0;transition:none}
+.exhibition-scroll-thumb::before,.exhibition-scroll-thumb::after{content:'';position:absolute;top:0;width:100%;height:100%;background:currentColor}
+.exhibition-scroll-thumb::before{left:calc(-1 * var(--rail-length,150px))}
+.exhibition-scroll-thumb::after{left:var(--rail-length,150px)}
+
