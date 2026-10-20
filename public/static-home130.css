@@ -60,3 +60,10 @@ body.living-home .exhibition-scroll{display:block}
 .exhibition-scroll-thumb::before{left:calc(-1 * var(--rail-length,150px))}
 .exhibition-scroll-thumb::after{left:var(--rail-length,150px)}
 
+/* Keep the scroll control beside the copyright, in the existing footer line. */
+.colophon-start{display:inline-flex;align-items:center;gap:18px;min-width:0}
+.copyright{white-space:nowrap}
+.colophon .exhibition-scroll{position:relative;left:auto;bottom:auto;transform:none;width:140px;z-index:auto;pointer-events:auto}
+.colophon .exhibition-scroll-hint{display:none}
+body.living-home .colophon{align-items:center}
+@media(max-width:699px){.colophon-start{gap:12px}.colophon .exhibition-scroll{width:100px}}
