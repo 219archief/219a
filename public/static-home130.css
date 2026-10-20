@@ -1,4 +1,5 @@
 .footer-action{display:inline-flex;align-items:center;gap:7px}
+body.living-home .series-label::before{width:2px}
 .footer-shuffle-icon{display:none}
 body.living-home{height:100dvh;overflow:hidden}
 body.living-home header{position:absolute;height:100dvh;min-height:0;padding:0}

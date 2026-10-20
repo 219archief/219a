@@ -40,7 +40,7 @@ window.PortfolioLiving={create({canvas,figures,photos}){
     for(let cycle=first;cycle<=last;cycle++){
      const x=start+cycle*lane.period,key=layer+':'+item.id+':'+(cycle+Math.floor(offset*lane.speed/lane.period));wanted.add(key);
      let node=live.get(key);
-     if(!node){node=templates.get(item.photo.id).cloneNode(true);node.hidden=false;node.classList.remove('is-zooming');const img=node.querySelector('img');img.style.transform='';img.loading='eager';img.fetchPriority='auto';img.sizes=Math.ceil(Math.max(item.w,width*.5))+'px';node.querySelector('a').classList.remove('is-hovered');const project=PortfolioProjects.projectForPhoto(item.photo.id),series=node.querySelector('.series-label');if(series)series.textContent=project.title.toLowerCase()+' · '+(project.workKind==='commissioned'?'in opdracht':'vrij werk');canvas.append(node);live.set(key,node)}
+     if(!node){node=templates.get(item.photo.id).cloneNode(true);node.hidden=false;node.classList.remove('is-zooming');const img=node.querySelector('img');img.style.transform='';img.loading='eager';img.fetchPriority='auto';img.sizes=Math.ceil(Math.max(item.w,width*.5))+'px';node.querySelector('a').classList.remove('is-hovered');const project=PortfolioProjects.projectForPhoto(item.photo.id),series=node.querySelector('.series-label');if(series)series.textContent=project.title.toLowerCase();canvas.append(node);live.set(key,node)}
      node.style.width=item.w+'px';node.style.transform=`translate3d(${x}px,${item.y}px,0)`;node.style.setProperty('--accent-width',item.w*.015+'px');node.dataset.layer=String(layer);
      node.querySelector('a').tabIndex=x+item.w>0&&x<width?0:-1;
     }
