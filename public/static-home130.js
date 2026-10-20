@@ -115,11 +115,14 @@ window.PortfolioLiving={create({canvas,figures,photos}){
  const thumb=document.createElement('span');thumb.className='exhibition-scroll-thumb';thumb.setAttribute('aria-hidden','true');const railWindow=document.createElement('span');railWindow.className='exhibition-scroll-window';railWindow.setAttribute('aria-hidden','true');railWindow.append(thumb);track.append(railWindow);
  const hint=document.createElement('span');hint.className='exhibition-scroll-hint';hint.textContent='↔ scroll / sleep';hint.setAttribute('aria-hidden','true');
  rail.append(track,hint);document.querySelector('.footer-scroll-slot').append(rail);
- function markerRestPosition(){const length=track.clientWidth,period=lanes[0]?.period||width;return period&&length?mod(offset/period*length,length)-length/2:0}
+ // Manual input springs back to the centre; idle motion then follows the photos.
+ let markerOffset=offset;
+ function markerRestPosition(){return 0}
  function markerDistance(from,to){const length=track.clientWidth||1;return mod(from-to+length/2,length)-length/2}
  function paintMarker(){const length=track.clientWidth;if(length){railX=mod(railX+length/2,length)-length/2;track.style.setProperty('--rail-length',length+'px')}thumb.style.transform=`translateX(${railX}px)`}
  function updateScrollMarker(){
-  if(!railActive){if(!springFrame){railX=markerRestPosition();railVelocity=0;paintMarker()}return}
+  const distance=offset-markerOffset;markerOffset=offset;
+  if(!railActive){if(!springFrame){railX-=distance;railVelocity=0;paintMarker()}return}
   const railWidth=track.clientWidth;if(!railWidth||!width)return;
   track.style.setProperty('--rail-length',railWidth+'px');
   const shift=mod((offset-railOrigin)/width*railWidth+railWidth/2,railWidth)-railWidth/2,now=performance.now();
@@ -145,13 +148,13 @@ window.PortfolioLiving={create({canvas,figures,photos}){
    if(railActive||document.hidden||!isHome())return;
    let remaining=Math.min(.05,Math.max(0,(now-previous)/1000));previous=now;
    // Unit mass, spring stiffness and damping. Substeps keep the return stable at any refresh rate.
-   while(remaining>0){const dt=Math.min(1/120,remaining);railVelocity+=(-190*markerDistance(railX,markerRestPosition())-7*railVelocity)*dt;railX+=railVelocity*dt;remaining-=dt}
-   if(Math.abs(markerDistance(railX,markerRestPosition()))<.04&&Math.abs(railVelocity)<.5){railX=markerRestPosition();railVelocity=0;paintMarker();return}
+   while(remaining>0){const dt=Math.min(1/120,remaining);railVelocity+=(-300*markerDistance(railX,markerRestPosition())-16*railVelocity)*dt;railX+=railVelocity*dt;remaining-=dt}
+   if(Math.abs(markerDistance(railX,markerRestPosition()))<.08&&Math.abs(railVelocity)<1){railX=markerRestPosition();railVelocity=0;paintMarker();return}
    paintMarker();springFrame=requestAnimationFrame(spring);
   }
   springFrame=requestAnimationFrame(spring);
  }
- function scheduleMarkerReturn(){clearTimeout(railReturn);railReturn=setTimeout(()=>{if(!railDrag)returnMarker()},350)}
+ function scheduleMarkerReturn(){clearTimeout(railReturn);railReturn=setTimeout(()=>{if(!railDrag)returnMarker()},200)}
  track.addEventListener('pointerdown',event=>{
   if(event.button!==0||!isHome())return;
   stop();activateScrollMarker();railDrag={id:event.pointerId,start:event.clientX,last:event.clientX,moved:false};
