@@ -5,10 +5,11 @@
   logo.style.removeProperty('transform');
   logo.style.removeProperty('translate');
   const finePointer = matchMedia('(any-hover: hover)');
-  let wasScrolled, hovered = false, lastScale, lastOffset;
+  let wasScrolled, hovered = false, lastScale, lastOffset, homeScrolling = false, scrollEndTimer = 0;
   function update() {
     const scrolled = window.scrollY > 0;
-    const baseScale = scrolled ? 0.8 : 1;
+    const onHome = document.body.classList.contains('living-home');
+    const baseScale = (onHome ? homeScrolling : scrolled) ? 0.8 : 1;
     const scale = baseScale * (hovered ? 0.98 : 1);
     // Compensate half the hover shrink on each axis, preserving the visual centre.
     // The separate scroll scale retains its original top-left anchor.
@@ -35,6 +36,20 @@
   logo.addEventListener('pointercancel', leave);
   window.addEventListener('blur', leave);
   finePointer.addEventListener('change', leave);
+  function endHomeScroll() {
+    clearTimeout(scrollEndTimer);
+    homeScrolling = false;
+    update();
+  }
+  window.addEventListener('portfolio-home-scroll', () => {
+    if (!document.body.classList.contains('living-home')) return;
+    homeScrolling = true;
+    update();
+    clearTimeout(scrollEndTimer);
+    scrollEndTimer = setTimeout(endHomeScroll, 240);
+  });
+  window.addEventListener('blur', endHomeScroll);
+  window.addEventListener('hashchange', () => { endHomeScroll(); requestAnimationFrame(update); });
   window.addEventListener('scroll', update, { passive: true });
   window.addEventListener('resize', update, { passive: true });
   window.addEventListener('pageshow', update);

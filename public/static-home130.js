@@ -1,8 +1,7 @@
 /* Virtual circular exhibition. Existing figures are detached templates, never a long strip. */
 window.PortfolioLiving={create({canvas,figures,photos}){
  const templates=new Map(figures.map(f=>[f.dataset.photoId,f])),pool=photos.filter(p=>templates.has(p.id));
- const reduced=matchMedia('(prefers-reduced-motion: reduce)'),live=new Map(),measurements=new WeakMap(),home=document.querySelector('#werk');
- let photoBottom=0;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)'),live=new Map(),home=document.querySelector('#werk');
  let lanes=[],width=0,height=0,offset=0,target=0,frame=0,lastTime=0,seed=219,drag=null,suppressClickUntil=0,paused=false,lastInput=0,autoOverride=true,hoveredPhoto=null,railDrag=null,railActive=false,railOrigin=0,railReturn=0,springFrame=0,railX=0,railVelocity=0,railSample=0;
  const mod=(v,n)=>((v%n)+n)%n,isHome=()=>!home.hidden&&!document.querySelector('dialog[open]');
  canvas.replaceChildren();canvas.tabIndex=0;canvas.setAttribute('role','region');
@@ -22,9 +21,9 @@ window.PortfolioLiving={create({canvas,figures,photos}){
    slots.forEach(([x,y,w,h],slot)=>{
     const index=chapter*slots.length+slot,photo=order[index%order.length];
     const variation=chapter%3===1?.025:chapter%3===2?-.025:0;
-    const top=Math.max(0,Math.min(Math.max(short?64:100,height*(y+variation)),photoBottom-caption-20));
-    const available=Math.max(1,Math.min(height*h,photoBottom-top)-caption);
-    const size=Math.max(1,Math.min(width*w,available*photo.ratio));
+    const top=Math.max(short?64:100,height*(y+variation));
+    const available=Math.max(20,Math.min(height*h,height-(short?65:84)-top)-caption);
+    const size=Math.max(20,Math.min(width*w,available*photo.ratio));
     items.push({id:index,photo,x:chapter*chapterWidth+width*x,y:top,w:size});
    });
   }
@@ -42,12 +41,7 @@ window.PortfolioLiving={create({canvas,figures,photos}){
      const x=start+cycle*lane.period,key=layer+':'+item.id+':'+(cycle+Math.floor(offset*lane.speed/lane.period));wanted.add(key);
      let node=live.get(key);
      if(!node){node=templates.get(item.photo.id).cloneNode(true);node.hidden=false;node.classList.remove('is-zooming');const img=node.querySelector('img');img.style.transform='';img.loading='eager';img.fetchPriority='auto';img.sizes=Math.ceil(Math.max(item.w,width*.5))+'px';node.querySelector('a').classList.remove('is-hovered');const project=PortfolioProjects.projectForPhoto(item.photo.id),series=node.querySelector('.series-label');if(series)series.textContent=project.title.toLowerCase()+' · '+(project.workKind==='commissioned'?'in opdracht':'vrij werk');canvas.append(node);live.set(key,node)}
-     node.style.width=item.w+'px';node.style.setProperty('--accent-width',item.w*.015+'px');
-     // Include wrapped captions and the image accent, without measuring every animation frame.
-     let measured=measurements.get(node);
-     if(measured?.item!==item){measured={item,height:node.offsetHeight};measurements.set(node,measured)}
-     const y=Math.max(0,Math.min(item.y,photoBottom-measured.height-item.w*.015));
-     node.style.transform=`translate3d(${x}px,${y}px,0)`;node.dataset.layer=String(layer);
+     node.style.width=item.w+'px';node.style.transform=`translate3d(${x}px,${item.y}px,0)`;node.style.setProperty('--accent-width',item.w*.015+'px');node.dataset.layer=String(layer);
      node.querySelector('a').tabIndex=x+item.w>0&&x<width?0:-1;
     }
    }
@@ -79,13 +73,11 @@ window.PortfolioLiving={create({canvas,figures,photos}){
  }
  function move(delta,immediate=false){
   if(!isHome()||!Number.isFinite(delta))return;
+  if(delta!==0)window.dispatchEvent(new Event('portfolio-home-scroll'));
   const now=performance.now();if(now-lastInput>160)document.dispatchEvent(new Event('pointercancel'));lastInput=now;activateScrollMarker();target+=delta;if(!railDrag)scheduleMarkerReturn();
   if(immediate||reduced.matches){offset=target;render()}else if(!frame)frame=requestAnimationFrame(tick);
  }
- function layout(force=false){if(home.hidden)return;const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
-  // Keep the entire moving composition above the scroll control at every breakpoint.
-  const bottom=Math.max(0,Math.min(h,rail.getBoundingClientRect().top-canvas.getBoundingClientRect().top-24));
-  if(!force&&w===width&&h===height&&bottom===photoBottom){if(!live.size)render();wake();return}stop();width=w;height=h;photoBottom=bottom;build();render();wake()}
+ function layout(force=false){if(home.hidden)return;const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;if(!force&&w===width&&h===height){if(!live.size)render();wake();return}stop();width=w;height=h;build();render();wake()}
  function select(){seed=Math.floor(Math.random()*4294967296);layout(true)}
  window.addEventListener('wheel',event=>{if(!isHome()||event.ctrlKey||event.defaultPrevented)return;event.preventDefault();const unit=event.deltaMode===1?16:event.deltaMode===2?width:1;move((Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY)*unit)},{passive:false});
  canvas.addEventListener('pointerdown',event=>{if(event.button!==0||!isHome())return;stop();drag={id:event.pointerId,startX:event.clientX,startY:event.clientY,x:event.clientX,moved:false}});
@@ -182,7 +174,6 @@ window.PortfolioLiving={create({canvas,figures,photos}){
  track.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();move(width*.25*(event.key==='ArrowLeft'?-1:1))}});
  window.addEventListener('blur',()=>{railDrag=null;track.classList.remove('is-dragging');updateScrollMarker();scheduleMarkerReturn();wake()});
  window.addEventListener('resize',()=>layout());window.addEventListener('hashchange',()=>{hoveredPhoto=null;railDrag=null;track.classList.remove('is-dragging');updateScrollMarker();scheduleMarkerReturn();stop();requestAnimationFrame(wake)});window.addEventListener('pageshow',wake);document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else wake()});
- const layoutObserver=new ResizeObserver(()=>layout(true));layoutObserver.observe(canvas);layoutObserver.observe(rail);
  reduced.addEventListener('change',()=>{syncMotion();layout(true)});document.fonts.ready.then(()=>layout(true));
  return{layout,select,syncMotion};
 }};
