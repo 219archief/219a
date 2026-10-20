@@ -68,7 +68,6 @@
 .project-breadcrumb>a:hover,.project-breadcrumb>a:focus-visible{opacity:1;text-decoration-color:currentColor}
 .project-breadcrumb>span:not([aria-current]){opacity:.28;user-select:none}
 .project-breadcrumb>[aria-current]{display:inline-flex;align-items:center;gap:8px;min-height:44px;overflow-wrap:anywhere;font-weight:500}
-.project-breadcrumb>[aria-current]::before{content:'';flex:none;width:12px;height:10px;background:currentColor;clip-path:polygon(0 0,42% 0,58% 22%,100% 22%,100% 100%,0 100%);opacity:.75}
 @media(max-width:599px){.project-breadcrumb{font-size:11px;column-gap:8px}.project-breadcrumb>[aria-current]{gap:6px}}
 @media(prefers-reduced-motion:reduce){.project-breadcrumb>a{transition:none}}
 /* Share the info page's content axis and top spacing. */
