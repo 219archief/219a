@@ -89,6 +89,17 @@ header>nav,header>.intro,header>.sort-bar{z-index:2}
 /* Iets grotere menutekst voor het pixellettertype bij hover. */
 header>nav{font-size:13px}
 header>nav .honk-label::after{justify-content:center}
+@keyframes menu-font-cycle{
+ 0%,16.66%{font-family:"Instrument Serif",serif}
+ 16.67%,33.32%{font-family:Arial,sans-serif}
+ 33.33%,49.99%{font-family:Georgia,serif}
+ 50%,66.66%{font-family:"Courier New",monospace}
+ 66.67%,83.32%{font-family:"Helvetica Neue",Helvetica,sans-serif}
+ 83.33%,100%{font-family:Baskerville,"Times New Roman",serif}
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ header>nav .honk-link:hover .honk-label::after{animation:menu-font-cycle .9s steps(1,end) infinite}
+}
 @media(max-width:599px){header>nav{font-size:11px}}
 
 /* Alleen de lettervormen filteren de onderliggende pixels, nooit het tekstvak. */

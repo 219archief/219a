@@ -81,7 +81,11 @@
     const link = label && source.closest('a');
     const hovered = link && ((matchMedia('(hover:hover)').matches && link.matches(':hover')) || link.matches(':focus-visible'));
     const scale=parseFloat(getComputedStyle(source.closest('header>nav')).scale)||1;
-    const font = fontFor(style, hovered ? '"Instrument Serif"' : style.fontFamily, scale);
+    if(hovered){entry.hoverStarted??=performance.now()}else{entry.hoverStarted=undefined}
+    const hoverFonts=['"Instrument Serif"','Arial','Georgia','"Courier New"','"Helvetica Neue", Helvetica, sans-serif','Baskerville, "Times New Roman", serif'];
+    const cycling=matchMedia('(prefers-reduced-motion:no-preference)').matches;
+    const family=hoverFonts[cycling&&hovered?Math.floor((performance.now()-entry.hoverStarted)/150)%hoverFonts.length:0];
+    const font = fontFor(style, hovered ? family : style.fontFamily, scale);
     const text = transformText(source.textContent, style);
     const signature = [rect.width, rect.height, font, text, style.letterSpacing, hovered, devicePixelRatio].join('|');
     let pad = entry.pad || 3;
@@ -171,7 +175,7 @@
     dirty = false;
     if(force)discover();
     entries.forEach(entry => paint(entry, force));
-    if (performance.now() < settlingUntil || document.querySelector('.photo.is-zooming,.project-row figure.is-zooming,.project-color-overlay')) schedule();
+    if (performance.now() < settlingUntil || document.querySelector('.photo.is-zooming,.project-row figure.is-zooming,.project-color-overlay') || (matchMedia('(hover:hover) and (prefers-reduced-motion:no-preference)').matches && document.querySelector('header>nav>a:hover,header>nav>a:focus-visible'))) schedule();
   }
   function schedule(force = false) {
     dirty ||= force;
