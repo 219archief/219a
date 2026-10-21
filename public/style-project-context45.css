@@ -97,7 +97,7 @@ header>nav .honk-label::after{justify-content:center}
 .text-contrast-glyphs[hidden]{display:none}
 .text-contrast-source-ready{color:transparent}
 .text-contrast-label-ready .honk-original{opacity:0!important}.honk-link .text-contrast-label-ready::after{display:none!important}
-.text-contrast-source-ready::selection{background:#777;color:#fff}
+.text-contrast-source-ready::selection{background:#0000EE;color:#ffffff}
 
 .text-contrast-active header>nav .honk-label::after{display:none!important}
 
@@ -116,7 +116,7 @@ footer{position:relative;z-index:0}
   html.is-cursor-pressed,html.is-cursor-pressed body,html.is-cursor-pressed body *{cursor:url("assets/cursor-pressed-29.png") 1 1,auto!important}
 }
 
-::selection{background:#D9DBF1;color:#343650}
+::selection{background:#0000EE;color:#ffffff}
 
 
 
