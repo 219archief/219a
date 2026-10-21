@@ -27,7 +27,7 @@ function route(initial=false){
  currentProject=project;PortfolioProjectReveal.begin(project);if(dialog.open)dialog.close();PortfolioTheme.apply(project);
  document.body.classList.toggle('project-open',!!project);document.body.classList.toggle('info-open',isInfo);document.body.classList.toggle('archive-open',isArchive);document.body.classList.toggle('living-home',!project&&!isInfo&&!isArchive);
  homePage.hidden=!!project||isInfo||isArchive;projectPage.hidden=!project;infoPage.hidden=!isInfo;archivePage.hidden=!isArchive;footer.hidden=!!project||isInfo||isArchive;
- if(project){renderProject(project);void PortfolioProjectReveal.show();document.title=project.title.toLowerCase()+' — 219';window.scrollTo(0,0);if(!initial)projectPage.focus({preventScroll:true})}
+ if(project){renderProject(project);PortfolioProjectHorizontal.mount();void PortfolioProjectReveal.show();document.title=project.title.toLowerCase()+' — 219';window.scrollTo(0,0);if(!initial)projectPage.focus({preventScroll:true})}
  else if(isArchive){viewerPhotos=photos;PortfolioDirectory.render();document.title='archief — 219';window.scrollTo(0,0);if(!initial)archivePage.focus({preventScroll:true})}
  else{viewerPhotos=photos;document.title='219 — fotografisch archief';layout();
   if(isInfo){document.title='info & contact — 219';window.scrollTo(0,0);if(!initial)infoPage.focus({preventScroll:true});if(location.hash==='#contact')document.querySelector('#contact-form').scrollIntoView({block:'center'})}

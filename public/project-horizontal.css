@@ -1,0 +1,108 @@
+body.project-open{height:100dvh;overflow:hidden}
+.project-open .project-page{padding:0;margin:0;max-width:none;height:100dvh}
+.project-page[hidden]{display:none}
+.project-strip{display:flex;align-items:center;gap:clamp(60px,8vw,160px);width:100%;height:100dvh;overflow-x:auto;overflow-y:hidden;padding:120px 4vw 110px;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;outline-offset:-6px}
+.project-strip::-webkit-scrollbar{display:none}
+.project-strip .project-heading{flex:0 0 clamp(320px,36vw,580px);margin:0;padding:180px 0 0;min-height:0;max-height:100%;overflow-y:auto;scrollbar-width:thin;align-self:stretch}
+.project-strip .project-breadcrumb{font-size:11px;column-gap:8px}
+.project-strip .project-heading h1{font:400 clamp(46px,5vw,84px)/1.02 'Instrument Serif',serif;letter-spacing:-.04em;margin:24px 0 20px;overflow-wrap:anywhere}
+.project-strip .project-intro{font-size:13px;max-width:32ch;margin-top:28px}
+.project-strip .project-description{font-size:11px;max-width:36ch}
+.project-scroll-hint{font-size:10px;margin-top:36px;opacity:.6}
+.project-strip .project-gallery{display:flex;flex-direction:row;align-items:center;gap:clamp(50px,8vw,160px);flex:none;margin:0}
+.project-strip .project-row{display:contents}
+.project-strip .project-row figure{flex:none;width:calc(clamp(140px,100dvh - 290px,720px) * var(--photo-ratio));margin:0;max-width:none}
+.project-strip .project-row button{height:clamp(140px,100dvh - 290px,720px);width:100%}
+.project-strip .project-row img{width:100%;height:100%;object-fit:contain}
+.project-strip figcaption{font-size:10px;padding-top:12px}
+.project-ending{flex:0 0 clamp(280px,33vw,520px);padding-right:4vw}
+.project-ending h2{font:400 clamp(35px,4vw,64px)/1.1 'Instrument Serif',serif;letter-spacing:-.03em;margin:0 0 24px}
+.project-ending .project-end{margin:0;font-size:10px;opacity:.6}
+.project-ending .project-navigation{display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin:44px 0;font-size:13px}
+.project-ending>a{font-size:11px;display:inline-block;padding:12px 0}
+.project-sequence-count{display:none}
+.project-open .colophon>.footer-action{display:none}
+.project-open .project-sequence-count{display:block;margin-left:auto;font-size:10px}
+.project-sequence-progress{position:fixed;left:4vw;right:4vw;bottom:70px;height:1px;background:color-mix(in srgb,currentColor 15%,transparent);pointer-events:none}
+.project-sequence-progress::after{content:'';display:block;width:100%;height:1px;background:currentColor;transform:scaleX(var(--progress,0));transform-origin:left}
+@media(max-width:699px){
+ .project-strip{gap:10vw;padding:130px 6vw 110px}
+ .project-strip .project-heading{flex-basis:76vw;padding-top:15px;align-self:center;max-height:100%}
+ .project-strip .project-heading h1{font-size:48px}
+ .project-strip .project-breadcrumb{font-size:10px;column-gap:6px}
+ .project-strip .project-gallery{gap:10vw}
+ .project-strip .project-row figure{width:88vw}
+ .project-strip .project-row button{height:calc(100dvh - 300px);min-height:110px}
+ .project-strip .project-row img{object-position:center}
+ .project-ending{flex-basis:82vw}
+ .project-sequence-progress{left:6vw;right:6vw;bottom:65px}
+}
+@media(max-height:600px) and (min-width:700px){.project-strip{padding-top:90px;padding-bottom:100px}.project-strip .project-heading{padding-top:0}.project-strip .project-heading h1{font-size:42px}.project-strip .project-intro{margin-top:16px}.project-scroll-hint{margin-top:16px}}
+
+@media(max-width:699px){
+ .project-strip .project-row button{height:min(calc(88vw / var(--photo-ratio)),calc(100dvh - 300px));min-height:0}
+ .project-open .colophon>#footer-page{display:block;font-size:8px;max-width:40vw;text-align:center}
+}
+/* Reserve the full logo height so hover/scroll scaling never shifts the text. */
+.project-strip .project-heading{align-self:stretch}
+/* Compact, consistent text rhythm leaves room beneath the full-size logo. */
+.project-strip .project-heading h1{font-size:clamp(36px,3.2vw,52px);margin:12px 0 18px}
+.project-strip .project-year{margin:0 0 18px;line-height:1.5}
+.project-strip .project-intro{margin:18px 0;line-height:1.6}
+.project-strip .project-description{margin:0;line-height:1.65}
+.project-strip .project-scroll-hint{margin:22px 0 0;line-height:1.5}
+.project-strip .project-heading{scroll-padding-block:16px;touch-action:pan-y}
+.project-strip{touch-action:pan-x pan-y}
+.project-ending .project-navigation{position:static;inset:auto}
+@media(max-height:649px){
+ .project-strip{padding-top:85px;padding-bottom:95px}
+ .project-strip .project-heading{flex-basis:max(660px,76vw);padding-right:20px}
+ .project-strip .project-heading h1{font-size:32px;margin:8px 0 12px}
+ .project-strip .project-breadcrumb,.project-strip .project-breadcrumb>[aria-current],.project-strip .project-breadcrumb>a{min-height:30px}
+ .project-strip .project-year{margin-bottom:12px}
+ .project-strip .project-intro{margin:12px 0;font-size:12px}
+ .project-strip .project-scroll-hint{margin-top:14px}
+ .project-ending h2{font-size:32px}
+ .project-ending .project-navigation{margin:20px 0;gap:12px}
+}
+@media(min-height:650px) and (max-height:780px){
+ .project-strip .project-heading h1{font-size:38px;margin:8px 0 12px}
+ .project-strip .project-intro{margin:14px 0}
+ .project-strip .project-scroll-hint{margin-top:14px}
+}
+@media(max-height:649px){
+ .project-strip .project-scroll-hint{display:none}
+}
+@media(max-height:649px) and (max-width:699px){
+ .project-strip .project-heading{flex-basis:82vw;padding-right:0}
+ .project-strip .project-heading h1{font-size:30px}
+}
+.project-strip .project-heading{display:flex;flex-direction:column;overflow:hidden}
+.project-strip .project-breadcrumb{flex:none}
+.project-heading-content{min-height:0;overflow-y:auto;scrollbar-width:thin;padding-right:12px;padding-bottom:8px;overscroll-behavior:contain;touch-action:pan-y}
+@media(max-width:699px){
+ .project-open header>nav{left:6vw;right:auto;top:var(--project-menu-top,205px);transform-origin:left top}
+}
+@media(max-height:649px){
+ .project-strip .project-intro{margin:8px 0}
+ .project-strip .project-year{margin-bottom:8px}
+}
+/* Twice the intro hold distance, retaining 24px before the opening photo. */
+.project-strip{column-gap:calc(2 * clamp(60px,8vw,160px) - 24px)}
+@media(max-width:699px){.project-strip{column-gap:calc(20vw - 24px)}}
+.project-ending-slot{flex:0 0 clamp(280px,33vw,520px)}
+.project-ending-slot .project-ending{width:100%}
+@media(max-width:699px){.project-ending-slot{flex-basis:82vw}}
+.project-ending-slot{margin-left:calc(12px - clamp(60px,8vw,160px))}
+.project-sequence-progress{display:none}
+body.project-open .project-scroll-control{display:block}
+body.living-home .project-scroll-control{display:none}
+@media(max-width:699px){.project-ending-slot{margin-left:calc(12px - 10vw)}}
+/* Project progress fills the footer rail from the beginning to the end. */
+.project-scroll-control .exhibition-scroll-thumb{left:0;width:100%;transform-origin:left center}
+.project-scroll-control .exhibition-scroll-thumb::before,.project-scroll-control .exhibition-scroll-thumb::after{display:none}
+.project-title-line{display:flex;align-items:baseline;gap:14px;width:max-content;max-width:100%}
+.project-title-line h1{min-width:0}
+.project-fullscreen{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;padding:0;border:0;background:transparent;color:inherit;cursor:pointer;opacity:.55}
+.project-fullscreen:hover,.project-fullscreen:focus-visible{opacity:1}
+.project-fullscreen svg{display:block}

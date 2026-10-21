@@ -9,7 +9,7 @@
   if(current!==generation)return;
   await Promise.all(document.documentElement.getAnimations().map(a=>a.finished.catch(()=>{})));
   if(current!==generation)return;
-  const visible=[...gallery.querySelectorAll('img')].filter((img,i)=>i===0||img.getBoundingClientRect().top<innerHeight);
+  const visible=[...gallery.querySelectorAll('img')].filter((img,i)=>{const r=img.getBoundingClientRect();return i===0||(r.top<innerHeight&&r.bottom>0&&r.left<innerWidth&&r.right>0)});
   await Promise.all(visible.map(img=>img.decode?img.decode().catch(()=>{}):Promise.resolve()));
   if(current!==generation)return;
   gallery.style.opacity='1';

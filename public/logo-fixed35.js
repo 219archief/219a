@@ -7,7 +7,7 @@
   const finePointer = matchMedia('(any-hover: hover)');
   let wasScrolled, hovered = false, lastScale, lastOffset, homeScrolling = false, scrollEndTimer = 0;
   function update() {
-    const scrolled = window.scrollY > 0;
+    const scrolled = window.scrollY > 0 || (document.body.classList.contains("project-open") && (document.querySelector(".project-strip")?.scrollLeft || 0) > 0);
     const onHome = document.body.classList.contains('living-home');
     const baseScale = (onHome ? homeScrolling : scrolled) ? 0.8 : 1;
     const scale = baseScale * (hovered ? 0.98 : 1);
@@ -51,6 +51,7 @@
   window.addEventListener('blur', endHomeScroll);
   window.addEventListener('hashchange', () => { endHomeScroll(); requestAnimationFrame(update); });
   window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('portfolio-project-scroll', update);
   window.addEventListener('resize', update, { passive: true });
   window.addEventListener('pageshow', update);
   window.addEventListener('hashchange', update);
