@@ -106,3 +106,11 @@ body.living-home .project-scroll-control{display:none}
 .project-fullscreen{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;flex:none;padding:0;border:0;background:transparent;color:inherit;cursor:pointer;opacity:.55}
 .project-fullscreen:hover,.project-fullscreen:focus-visible{opacity:1}
 .project-fullscreen svg{display:block}
+
+/* Explicit boxes keep horizontal flex layout consistent across browser engines. */
+.project-strip .project-row{display:block;flex:0 0 auto;min-width:0}
+.project-strip .project-row figure{width:var(--photo-width,420px)}
+.project-strip .project-row button{height:var(--photo-height,280px);min-height:0}
+.project-heading-content{flex:1 1 auto;min-width:0}
+.project-strip .project-row img{max-width:none;max-height:none;flex-shrink:0}
+.project-strip .project-row,.project-strip .project-row figure,.project-strip .project-row button{flex-shrink:0;box-sizing:border-box}
