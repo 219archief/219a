@@ -114,3 +114,7 @@ body.living-home .project-scroll-control{display:none}
 .project-heading-content{flex:1 1 auto;min-width:0}
 .project-strip .project-row img{max-width:none;max-height:none;flex-shrink:0}
 .project-strip .project-row,.project-strip .project-row figure,.project-strip .project-row button{flex-shrink:0;box-sizing:border-box}
+/* A quick appearance at the end of the sequence, reversed when scrolling back. */
+.project-ending{opacity:0;transition:opacity 180ms ease-out;pointer-events:none}
+.project-ending.is-visible,.project-ending:focus-within{opacity:1;pointer-events:auto}
+@media(prefers-reduced-motion:reduce){.project-ending{transition:none}}

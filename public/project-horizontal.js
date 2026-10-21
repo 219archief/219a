@@ -62,6 +62,8 @@ window.PortfolioProjectHorizontal=(()=>{
   const endingSpace=last?ending.getBoundingClientRect().left-last.getBoundingClientRect().right-endingShift-photoGap/2:0;
   endingShift=-Math.min(Math.max(0,range-strip.scrollLeft),Math.max(0,endingSpace));
   ending.style.transform=`translateX(${endingShift}px)`;
+  const endingRect=ending.getBoundingClientRect(),stripRect=strip.getBoundingClientRect();
+  ending.classList.toggle('is-visible',endingRect.left<stripRect.right-32&&endingRect.right>stripRect.left+32);
   progress.style.setProperty('--progress',range?strip.scrollLeft/range:0);
   if(footerThumb){footerThumb.style.transform=`scaleX(${range?Math.max(0,Math.min(1,strip.scrollLeft/range)):0})`;}
   window.dispatchEvent(new Event('portfolio-composition-change'));
