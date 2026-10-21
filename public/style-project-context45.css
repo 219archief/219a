@@ -192,3 +192,6 @@ footer{padding-bottom:114px}
 .project-description-content p{margin:0 0 14px}
 header>.sort-bar{z-index:4}
 @media(max-width:599px){.project-heading{margin-left:0;padding-top:100px;min-height:0;margin-bottom:55px}.project-intro{max-width:34ch;font-size:13px}.project-description{font-size:11px}}
+/* A shared JS clock drives both ordinary text and the contrast-mask renderer. */
+header>nav .honk-label::after{font-family:var(--menu-hover-font,"Instrument Serif",serif)}
+header>nav .honk-link:hover .honk-label::after{animation:none}

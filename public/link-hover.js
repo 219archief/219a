@@ -22,6 +22,24 @@
     });
   }
   prepareLinks();
+  // Drive explicit font values in both the CSS fallback and contrast renderer.
+  const menuFonts=['"Instrument Serif", serif','Arial, sans-serif','Georgia, serif','"Courier New", monospace','"Helvetica Neue", Helvetica, sans-serif','Baskerville, "Times New Roman", serif'];
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+  let activeMenu=null,fontTimer=0,fontIndex=0;
+  function stopMenuFonts(){clearInterval(fontTimer);fontTimer=0;activeMenu?.style.removeProperty('--menu-hover-font');activeMenu=null}
+  function startMenuFonts(link){
+    if(activeMenu===link)return;stopMenuFonts();activeMenu=link;fontIndex=0;
+    const paint=()=>{link.style.setProperty('--menu-hover-font',menuFonts[fontIndex%menuFonts.length]);fontIndex++;window.dispatchEvent(new Event('portfolio-menu-font-change'))};
+    paint();if(!reduced.matches)fontTimer=setInterval(paint,150);
+  }
+  document.querySelectorAll('header>nav>a').forEach(link=>{
+    link.addEventListener('pointerenter',event=>{if(['mouse','pen'].includes(event.pointerType))startMenuFonts(link)});
+    link.addEventListener('pointerleave',()=>{if(activeMenu===link)stopMenuFonts()});
+    link.addEventListener('focus',()=>{if(link.matches(':focus-visible'))startMenuFonts(link)});
+    link.addEventListener('blur',()=>{if(activeMenu===link)stopMenuFonts()});
+  });
+  window.addEventListener('blur',stopMenuFonts);window.addEventListener('hashchange',stopMenuFonts);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stopMenuFonts()});
   const navigation = document.querySelector('#project-navigation');
   if (navigation) new MutationObserver(prepareLinks).observe(navigation, { childList: true });
 })();

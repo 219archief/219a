@@ -85,7 +85,8 @@
     const hoverFonts=['"Instrument Serif"','Arial','Georgia','"Courier New"','"Helvetica Neue", Helvetica, sans-serif','Baskerville, "Times New Roman", serif'];
     const cycling=matchMedia('(prefers-reduced-motion:no-preference)').matches;
     const family=hoverFonts[cycling&&hovered?Math.floor((performance.now()-entry.hoverStarted)/150)%hoverFonts.length:0];
-    const font = fontFor(style, hovered ? family : style.fontFamily, scale);
+    const hoverFamily=getComputedStyle(source).getPropertyValue('--menu-hover-font').trim()||family;
+    const font = fontFor(style, hovered ? hoverFamily : style.fontFamily, scale);
     const text = transformText(source.textContent, style);
     const signature = [rect.width, rect.height, font, text, style.letterSpacing, hovered, devicePixelRatio].join('|');
     let pad = entry.pad || 3;
@@ -194,6 +195,7 @@
     window.addEventListener('pageshow', () => schedule(true));
     window.addEventListener('hashchange', () => {settlingUntil=performance.now()+2500;schedule(true)});window.addEventListener('project-background-ready',()=>{settlingUntil=performance.now()+2500;schedule()});
     document.addEventListener('pointerover', () => schedule());
+    window.addEventListener('portfolio-menu-font-change', () => schedule());
     document.addEventListener('pointerout', () => schedule());
     document.addEventListener('focusin', () => schedule());
     document.addEventListener('focusout', () => schedule());
