@@ -1,5 +1,9 @@
 .footer-action{display:inline-flex;align-items:center;gap:7px}
 .colophon #footer-page{position:absolute;left:50%;transform:translateX(-50%)}
+@media(min-width:700px){
+ .colophon{align-items:center}
+ .colophon #footer-page{top:50%;transform:translate(-50%,-50%)}
+}
 body.living-home .series-label::before{width:2px}
 .footer-shuffle-icon{display:none}
 body.living-home{height:100dvh;overflow:hidden}

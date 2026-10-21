@@ -18,11 +18,13 @@ window.PortfolioProjectHorizontal=(()=>{
  function update(){frame=0;if(page.hidden)return;const pictures=[...gallery.querySelectorAll('figure')],centre=strip.getBoundingClientRect().left+strip.clientWidth/2;let nearest=0,distance=Infinity;
   const logo=document.querySelector('.identity');
   const viewportHeight=strip.clientHeight;
+  const thumbnailSpace=parseFloat(getComputedStyle(document.body).getPropertyValue('--project-thumbnail-space'))||0;
+  const photoBudget=thumbnailSpace&&innerWidth<700?viewportHeight-parseFloat(getComputedStyle(strip).paddingTop)-parseFloat(getComputedStyle(strip).paddingBottom)-28:viewportHeight-300-thumbnailSpace;
   for(const figure of pictures){
    const image=figure.querySelector('img');
    const ratio=Number(image.getAttribute('width'))/Number(image.getAttribute('height'))||1;
    const compact=innerWidth<700;
-   const photoHeight=compact?Math.max(1,Math.min(innerWidth*.88/ratio,viewportHeight-300)):Math.max(140,Math.min(viewportHeight-290,720));
+   const photoHeight=compact?Math.max(1,Math.min(innerWidth*.88/ratio,photoBudget)):Math.max(80,Math.min(viewportHeight-290-thumbnailSpace,720));
    const photoWidth=photoHeight*ratio;
    const frameWidth=compact?innerWidth*.88:photoWidth;
    figure.style.setProperty('--photo-width',frameWidth+'px');
@@ -62,6 +64,7 @@ window.PortfolioProjectHorizontal=(()=>{
   const last=pictures[pictures.length-1];
   const endingSpace=last?ending.getBoundingClientRect().left-last.getBoundingClientRect().right-endingShift-photoGap/2:0;
   endingShift=-Math.min(Math.max(0,range-strip.scrollLeft),Math.max(0,endingSpace));
+  if(thumbnailSpace&&innerWidth<700)endingShift=0;
   ending.style.transform=`translateX(${endingShift}px)`;
   const endingRect=ending.getBoundingClientRect(),stripRect=strip.getBoundingClientRect();
   ending.classList.toggle('is-visible',endingRect.left<stripRect.right-32&&endingRect.right>stripRect.left+32);
@@ -71,9 +74,9 @@ window.PortfolioProjectHorizontal=(()=>{
   window.dispatchEvent(new Event('portfolio-project-scroll'));
  }
  function schedule(){if(!frame)frame=requestAnimationFrame(update)}
- strip.addEventListener('scroll',schedule,{passive:true});textPanel.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);
+ strip.addEventListener('scroll',schedule,{passive:true});textPanel.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('portfolio-thumbnails-change',schedule);
  window.addEventListener('wheel',event=>{
-  if(page.hidden||document.querySelector('dialog[open]')||event.ctrlKey||event.defaultPrevented)return;
+  if(page.hidden||document.querySelector('dialog[open]')||event.target.closest('.project-thumbnails')||event.ctrlKey||event.defaultPrevented)return;
   const horizontal=Math.abs(event.deltaX)>Math.abs(event.deltaY);
   // Long, expanded descriptions retain their own vertical reading scroll.
   if(!horizontal&&event.target.closest('.project-description-content')&&textPanel.scrollHeight>textPanel.clientHeight+1)return;
@@ -98,5 +101,5 @@ window.PortfolioProjectHorizontal=(()=>{
   footerTrack.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();if(event.key==='Home'||event.key==='End')strip.scrollTo({left:event.key==='Home'?0:strip.scrollWidth,behavior:reduced()?'instant':'smooth'});else strip.scrollBy({left:(event.key==='ArrowLeft'?-1:1)*strip.clientWidth*.5,behavior:reduced()?'instant':'smooth'})}});
   footerTrack.addEventListener('click',event=>{if(event.detail===0)strip.scrollBy({left:strip.clientWidth*.5,behavior:reduced()?'instant':'smooth'})});
  }
- return{mount(){prepareFooter();page.querySelector('#project-end').textContent=gallery.querySelectorAll('figure').length+' beelden';textPanel.scrollTop=0;for(const figure of gallery.querySelectorAll('figure')){const image=figure.querySelector('img');figure.style.setProperty('--photo-ratio',Number(image.getAttribute('width'))/Number(image.getAttribute('height')));image.sizes='(max-width: 699px) 88vw, 80vw'}strip.scrollLeft=0;schedule()}};
+ return{mount(){window.PortfolioProjectThumbnails?.mount();prepareFooter();page.querySelector('#project-end').textContent=gallery.querySelectorAll('figure').length+' beelden';textPanel.scrollTop=0;for(const figure of gallery.querySelectorAll('figure')){const image=figure.querySelector('img');figure.style.setProperty('--photo-ratio',Number(image.getAttribute('width'))/Number(image.getAttribute('height')));image.sizes='(max-width: 699px) 88vw, 80vw'}strip.scrollLeft=0;schedule()}};
 })();

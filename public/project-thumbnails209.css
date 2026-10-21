@@ -1,0 +1,29 @@
+.project-footer-tools{display:none}
+.project-open .project-footer-tools{display:flex;align-items:center;gap:20px;margin-left:auto;pointer-events:auto}
+.project-open .project-footer-tools .project-sequence-count{margin:0}
+.project-overview-toggle{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0;border:0;background:none;color:inherit;font:inherit;font-size:10px;cursor:pointer}
+.project-overview-toggle:hover span,.project-overview-toggle[aria-expanded=true] span{text-decoration:underline;text-underline-offset:4px}
+.project-thumbnails{position:fixed;left:4vw;right:4vw;z-index:105;background:var(--page-bg,#faf9f6);color:var(--page-ink,#161616);border-top:1px solid color-mix(in srgb,currentColor 25%,transparent);padding-top:4px}
+.project-thumbnails[hidden]{display:none}
+.project-thumbnails-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:9px}
+.project-thumbnails-close{padding:8px 0 8px 16px;border:0;background:none;color:inherit;font:inherit;min-height:32px;cursor:pointer}
+.project-thumbnails-list{display:flex;gap:20px;list-style:none;padding:4px 0 8px;margin:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.project-thumbnails-list li{flex:0 0 120px;min-width:0}
+.project-thumbnail{display:flex;flex-direction:column;align-items:center;gap:8px;border:0;border-bottom:1px solid transparent;padding:4px 0 7px;width:100%;background:none;color:inherit;font:inherit;font-size:9px;cursor:pointer;outline-offset:-2px}
+.project-thumbnail img{display:block;width:120px;height:80px;object-fit:contain}
+.project-thumbnail[aria-current=true]{border-bottom-color:currentColor}
+.project-thumbnail:hover{background:color-mix(in srgb,currentColor 5%,transparent)}
+.project-thumbnails-open .project-strip{padding-bottom:calc(110px + var(--project-thumbnail-space,160px))}
+@media(max-width:699px){
+ .project-thumbnails-open .project-ending-slot{max-height:100%;min-height:0;overflow-y:auto}
+ .project-open .project-footer-tools{display:contents}
+ .colophon .project-overview-toggle{grid-column:3;grid-row:2;justify-self:end;gap:0;font-size:8px}
+ .project-overview-toggle svg{display:none}
+ .project-thumbnails{left:6vw;right:6vw}
+ .project-thumbnails-list{gap:12px}
+ .project-thumbnails-list li{flex-basis:76px}
+ .project-thumbnail img{width:76px;height:52px}
+ .project-thumbnail{gap:5px;padding-bottom:5px}
+ .project-thumbnails-open .project-strip{padding-bottom:calc(112px + var(--project-thumbnail-space,132px))}
+ .project-thumbnails-open .project-scroll-hint{display:none}
+}
