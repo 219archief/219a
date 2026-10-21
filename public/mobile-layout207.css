@@ -1,0 +1,26 @@
+/* Shared mobile chrome: reserve the logo, navigation and footer footprints. */
+.project-scroll-hint{display:block;border:0;background:none;color:inherit;font:inherit;font-size:10px;text-align:left;padding:10px 0;cursor:pointer;flex:none}
+@media(max-width:699px){
+ body:is(.project-open,.archive-open,.info-open) header{position:absolute;height:0;min-height:0}
+ body:is(.living-home,.project-open,.archive-open,.info-open) .identity{width:96px;top:24px;left:6vw}
+ body header>nav,body.project-open header>nav{left:6vw;right:auto;top:136px;scale:1!important;transform-origin:top left;gap:24px}
+ body header>nav a{min-height:44px}
+ .archive-directory,.info-page{padding-top:208px}
+ .colophon,body.living-home .colophon{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);grid-template-rows:24px 40px;gap:0 8px;align-items:center;bottom:max(16px,env(safe-area-inset-bottom));left:6vw;right:6vw;font-size:9px}
+ .colophon-start{display:contents}
+ .colophon .copyright{grid-column:1;grid-row:1}
+ .colophon #footer-page,.project-open .colophon>#footer-page{display:block;position:static;transform:none;grid-column:2;grid-row:1;max-width:none;font-size:8px;text-align:center;white-space:nowrap}
+ .colophon>.footer-action,.project-open .project-sequence-count{grid-column:3;grid-row:1;justify-self:end;margin:0;font-size:9px}
+ .colophon .footer-scroll-slot{grid-column:1/-1;grid-row:2;justify-self:center}
+ .colophon .exhibition-scroll{width:140px}
+ /* Reading pages keep the footer after their content instead of over it. */
+ body:is(.archive-open,.info-open) .colophon{position:relative;left:auto;right:auto;bottom:auto;margin:0 6vw;padding-bottom:max(20px,env(safe-area-inset-bottom));grid-template-rows:44px}
+ body:is(.archive-open,.info-open) .footer-scroll-slot{display:none}
+ .project-strip{padding-top:208px;padding-bottom:112px}
+ .project-strip .project-heading{flex-basis:66vw;padding-right:0}
+ .project-strip .project-scroll-hint{display:block;margin:8px 0 0;min-height:40px;opacity:.8}
+ .project-heading-content{padding-right:6px}
+ .project-title-line{gap:4px}
+ .project-strip .project-heading h1{font-size:clamp(27px,6.8vw,38px)}
+ .project-strip .project-breadcrumb{flex-wrap:wrap;row-gap:0}
+}

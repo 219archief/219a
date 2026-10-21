@@ -5,7 +5,7 @@ window.PortfolioProjectHorizontal=(()=>{
  const ending=document.createElement('section');ending.className='project-ending';
  const endTitle=document.createElement('h2');endTitle.textContent='einde van de serie';ending.append(endTitle,page.querySelector('#project-end'),page.querySelector('#project-navigation'));
  const back=document.createElement('a');back.href='#archief';back.textContent='terug naar het archief ↗';ending.append(back);
- const hint=document.createElement('p');hint.className='project-scroll-hint';hint.textContent='scroll om te kijken →';heading.append(hint);const textPanel=document.createElement('div');textPanel.className='project-heading-content';for(const child of [...heading.children])if(!child.classList.contains('project-breadcrumb'))textPanel.append(child);heading.append(textPanel);const endingSlot=document.createElement('div');endingSlot.className='project-ending-slot';endingSlot.append(ending);strip.append(heading,gallery,endingSlot);page.append(strip);
+ const hint=document.createElement('button');hint.type='button';hint.className='project-scroll-hint';hint.textContent='bekijk de foto’s →';heading.append(hint);const textPanel=document.createElement('div');textPanel.className='project-heading-content';for(const child of [...heading.children])if(!child.classList.contains('project-breadcrumb')&&child!==hint)textPanel.append(child);heading.append(textPanel,hint);const endingSlot=document.createElement('div');endingSlot.className='project-ending-slot';endingSlot.append(ending);strip.append(heading,gallery,endingSlot);page.append(strip);
  const status=document.createElement('span');status.className='project-sequence-count';status.setAttribute('aria-label','Positie in de fotoreeks');document.querySelector('.colophon').append(status);
  const progress=document.createElement('div');progress.className='project-sequence-progress';progress.setAttribute('aria-hidden','true');page.append(progress);
  const title=document.querySelector('#project-title'),titleLine=document.createElement('div');titleLine.className='project-title-line';title.before(titleLine);titleLine.append(title);
@@ -13,6 +13,7 @@ window.PortfolioProjectHorizontal=(()=>{
  fullscreen.innerHTML='<svg viewBox="0 0 20 20" width="17" height="17" aria-hidden="true"><path d="M7 3H3v4M13 3h4v4M3 13v4h4M17 13v4h-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';titleLine.append(fullscreen);
  fullscreen.addEventListener('click',()=>gallery.querySelector('.project-row button')?.click());
  let frame=0,headingShift=0,endingShift=0,footerControl,footerTrack,footerThumb;
+ hint.addEventListener('click',()=>{const first=gallery.querySelector('figure');if(first)strip.scrollBy({left:first.getBoundingClientRect().left-strip.getBoundingClientRect().left-innerWidth*.06,behavior:reduced()?'instant':'smooth'})});
  const reduced=()=>matchMedia('(prefers-reduced-motion:reduce)').matches;
  function update(){frame=0;if(page.hidden)return;const pictures=[...gallery.querySelectorAll('figure')],centre=strip.getBoundingClientRect().left+strip.clientWidth/2;let nearest=0,distance=Infinity;
   const logo=document.querySelector('.identity');
@@ -35,7 +36,7 @@ window.PortfolioProjectHorizontal=(()=>{
   }
   page.style.setProperty('--project-menu-top',(parseFloat(getComputedStyle(logo).top)+logo.offsetHeight+12)+'px');
   document.body.style.setProperty('--project-menu-top',page.style.getPropertyValue('--project-menu-top'));
-  const headingTop=Math.max(0,parseFloat(getComputedStyle(logo).top)+logo.offsetHeight+(innerWidth<700?86:24)-parseFloat(getComputedStyle(strip).paddingTop));
+  const headingTop=Math.max(0,(innerWidth<700?document.querySelector('header > nav').getBoundingClientRect().bottom+24:parseFloat(getComputedStyle(logo).top)+logo.offsetHeight+24)-parseFloat(getComputedStyle(strip).paddingTop));
   const top=(innerHeight<650&&innerWidth>=700)?0:headingTop;
   const stripStyle=getComputedStyle(strip);
   const availableHeight=Math.max(1,viewportHeight-parseFloat(stripStyle.paddingTop)-parseFloat(stripStyle.paddingBottom)-top);

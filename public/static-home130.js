@@ -22,7 +22,8 @@ window.PortfolioLiving={create({canvas,figures,photos}){
     const index=chapter*slots.length+slot,photo=order[index%order.length];
     const variation=chapter%3===1?.025:chapter%3===2?-.025:0;
     const top=Math.max(short?64:100,height*(y+variation));
-    const available=Math.max(20,Math.min(height*h,height-(short?65:84)-top)-caption);
+    const footerTop=document.querySelector('.colophon').getBoundingClientRect().top;
+    const available=Math.max(20,Math.min(height*h,Math.min(height-(short?65:84),footerTop-16)-top)-caption);
     const size=Math.max(20,Math.min(width*w,available*photo.ratio));
     items.push({id:index,photo,x:chapter*chapterWidth+width*x,y:top,w:size});
    });
