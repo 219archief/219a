@@ -13,9 +13,3 @@ body>header{z-index:120}
 .identity{z-index:100;transform:translateZ(0)!important;-webkit-backface-visibility:hidden;backface-visibility:hidden}
 .logo-contrast-canvas{z-index:1}
 body.living-home #werk{isolation:isolate;z-index:1}
-/* Match the text-selection blue while preserving the existing logo scaling. */
-@media(hover:hover){
- .identity:hover img,.identity:hover .logo-contrast-canvas{opacity:0}
- .identity:hover::before{display:none!important}
- .identity:hover::after{display:block!important;position:absolute;inset:0;z-index:2;background:#0000EE;clip-path:none!important;mask:url("assets/Logo%20Wit.png") center/contain no-repeat!important;-webkit-mask:url("assets/Logo%20Wit.png") center/contain no-repeat!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;pointer-events:none}
-}
