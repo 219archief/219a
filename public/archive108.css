@@ -64,8 +64,8 @@
 @media(max-width:599px){.directory-table col:nth-child(1){width:31%}.directory-table col:nth-child(2){width:12%}.directory-table col:nth-child(3){width:17%}.directory-table col:nth-child(4){width:20%}.directory-table col:nth-child(5){width:20%}.directory-table th button{font-size:9px;letter-spacing:-.03em;gap:2px}.directory-sort-mark{width:5px}}
 /* A restrained directory trail: quiet ancestors, a crisp current folder. */
 .project-breadcrumb{flex-wrap:wrap;column-gap:10px;row-gap:0;font-size:12px;line-height:1.6;letter-spacing:-.025em;align-items:center}
-.project-breadcrumb>a{opacity:.62;transition:opacity 180ms ease;text-decoration-line:underline;text-decoration-color:transparent;text-underline-offset:5px;text-decoration-thickness:1px}
-.project-breadcrumb>a:hover,.project-breadcrumb>a:focus-visible{opacity:1;text-decoration-color:currentColor}
+.project-breadcrumb>a,.directory-kicker a{color:#0000EE;opacity:1;transition:opacity 180ms ease;text-decoration-line:underline;text-decoration-color:transparent;text-underline-offset:5px;text-decoration-thickness:1px}
+.project-breadcrumb>a:hover,.project-breadcrumb>a:focus-visible,.directory-kicker a:hover,.directory-kicker a:focus-visible{opacity:1;text-decoration-color:#0000EE}
 .project-breadcrumb>span:not([aria-current]){opacity:.28;user-select:none}
 .project-breadcrumb>[aria-current]{display:inline-flex;align-items:center;gap:8px;min-height:44px;overflow-wrap:anywhere;font-weight:500}
 @media(max-width:599px){.project-breadcrumb{font-size:11px;column-gap:8px}.project-breadcrumb>[aria-current]{gap:6px}}
