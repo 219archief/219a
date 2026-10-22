@@ -1,5 +1,5 @@
 /* Homepagezoom gebruikt vanaf het begin de voormalige 4x-snelheid. */
-(function(){const selector='.photo>a,.project-row button',states=new WeakMap();let active;
+(function(){const selector='.photo>a',states=new WeakMap();let active;
 function zoomGeometry(rect,viewport,height=window.innerHeight){
  const maxWidth=viewport*.5,maxHeight=Math.max(1,height-94);
  const scale=Math.min(Math.max(1,maxWidth/rect.width),maxHeight/rect.height);
@@ -35,20 +35,7 @@ function enter(item){if(item===active)return;if(active)leave(active);active=item
 document.addEventListener('pointerover',event=>{if(event.pointerType!=='mouse'&&event.pointerType!=='pen')return;const item=event.target.closest?.(selector);if(item)enter(item)});
 document.addEventListener('pointerout',event=>{const item=event.target.closest?.(selector);if(item&&!item.contains(event.relatedTarget))leave(item)});
 function reset(){document.querySelectorAll('.is-hovered').forEach(leave)}
-document.addEventListener('pointercancel',reset);window.addEventListener('blur',reset);window.addEventListener('resize',reset);window.addEventListener('hashchange',reset);window.addEventListener('scroll',()=>{
- // De homepage reset nog steeds; projectfoto's blijven gekoppeld aan echte hover.
- if(active&&!active.closest('.project-row'))leave(active);
- if(!matchMedia('(any-hover:hover)').matches)return;
- requestAnimationFrame(()=>{
-  const hovered=document.querySelector('.project-row button:hover');
-  if(hovered)enter(hovered);
-  else if(active?.closest('.project-row'))leave(active);
- });
-},{passive:true});
-document.addEventListener('pointermove',event=>{
- if(event.pointerType!=='mouse'&&event.pointerType!=='pen')return;
- const item=event.target.closest?.('.project-row button');if(item&&item!==active)enter(item);
-});
+document.addEventListener('pointercancel',reset);window.addEventListener('blur',reset);window.addEventListener('resize',reset);window.addEventListener('hashchange',reset);window.addEventListener('scroll',()=>{if(active)leave(active)},{passive:true});
 })();
 
 
